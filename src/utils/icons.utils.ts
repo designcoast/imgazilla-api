@@ -7,11 +7,44 @@ import {
   HEADER_SIZE,
 } from '~/constants';
 
+const svgDensity = (
+  metadata: sharp.Metadata,
+  width: number,
+  height: number,
+) => {
+  if (!metadata.width || !metadata.height) {
+    return undefined;
+  }
+  const currentDensity = metadata.density ?? 72;
+  return Math.min(
+    Math.max(
+      1,
+      currentDensity,
+      (currentDensity * width) / metadata.width,
+      (currentDensity * height) / metadata.height,
+    ),
+    100000,
+  );
+};
+
 export const resize = async (
   source: ISourceSet,
   width: number,
   height: number,
 ) => {
+  if (source.metadata.format === 'svg') {
+    const options = {
+      density: svgDensity(source.metadata, width, height),
+    };
+    return await sharp(source.imgBuffer, options)
+      .resize({
+        width,
+        height,
+        fit: sharp.fit.contain,
+        background: '#00000000',
+      })
+      .toBuffer();
+  }
   return await sharp(source.imgBuffer)
     .ensureAlpha()
     .resize({
@@ -137,7 +170,12 @@ const createDirectory = (image: any, offset: number) => {
   return buf;
 };
 
-export const createIcoImage = (images: any) => {
+export const createIcoImage = (
+  images: {
+    data: Buffer;
+    info: sharp.OutputInfo;
+  }[],
+) => {
   const header = createICOHeader(images.length);
   let arr = [header];
 
@@ -163,4 +201,26 @@ export const createIcoImage = (images: any) => {
   arr = [...arr, ...bitmaps];
 
   return Buffer.concat(arr);
+};
+
+export const createPngImage = (pipeline: sharp.Sharp): Promise<Buffer> =>
+  pipeline.png().toBuffer();
+
+export const createSvgImage = async (
+  source: ISourceSet,
+  options: any,
+): Promise<any> => {
+  const { width, height } = options;
+
+  if (source.metadata.format === 'svg') {
+    return source.imgBuffer;
+  } else {
+    const pipeline = await createPlane(source, options);
+    const png = await createPngImage(pipeline);
+    const encodedPng = png.toString('base64');
+    return Buffer.from(`
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">
+          <image width="${width}" height="${height}" xlink:href="data:image/png;base64,${encodedPng}"/>
+        </svg>`);
+  }
 };

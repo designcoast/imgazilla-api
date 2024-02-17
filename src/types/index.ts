@@ -9,3 +9,8 @@ export interface IIconOptions {
   transparent: boolean;
   rotate: boolean;
 }
+
+export interface IFaviconImages {
+  name: string;
+  buffer: Buffer;
+}

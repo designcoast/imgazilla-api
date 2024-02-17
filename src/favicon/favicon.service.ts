@@ -6,10 +6,16 @@ import * as sharp from 'sharp';
 import * as archiver from 'archiver';
 
 import { GenerateFaviconOptionsDto } from './dto/generate-favicon.dto';
-import { createIcoImage, createPlane, createRawImage } from '~/utils/ico.utils';
-import { IIconOptions } from '~/types';
+import {
+  createIcoImage,
+  createPlane,
+  createPngImage,
+  createRawImage,
+  createSvgImage,
+} from '~/utils/icons.utils';
+import { IFaviconImages, IIconOptions } from '~/types';
 import { getPlatformOptions } from '~/utils/platforms.utils';
-import { getIconOptions } from '~/utils/icons';
+import { getIconOptions } from '~/config/icon.config';
 
 export interface ISourceSet {
   imgBuffer: Buffer;
@@ -21,7 +27,7 @@ export class FaviconService {
   async generateFavicon(
     imageBuffer: Buffer,
     options: GenerateFaviconOptionsDto,
-  ) {
+  ): Promise<IFaviconImages[]> {
     const { platforms } = options;
 
     const source = {
@@ -46,7 +52,10 @@ export class FaviconService {
     return responses;
   }
 
-  private async createImages(source: ISourceSet, options: IIconOptions) {
+  private async createImages(
+    source: ISourceSet,
+    options: IIconOptions,
+  ): Promise<IFaviconImages> {
     const props = getIconOptions(options);
     const ext = extname(options.name);
 
@@ -54,18 +63,27 @@ export class FaviconService {
       const planeImages = await Promise.all(
         props.map((prop) => createPlane(source, prop).then(createRawImage)),
       );
-      return createIcoImage(planeImages);
+      const buffer = createIcoImage(planeImages);
+      return { name: options.name, buffer };
+    } else if (ext === '.svg') {
+      const buffer = await createSvgImage(source, props[0]);
+      return { name: options.name, buffer };
+    } else {
+      const buffer = await createPlane(source, props[0]).then(createPngImage);
+      return { name: options.name, buffer };
     }
   }
   private getPlatform() {}
 
-  async createArchive(imageBuffer: Buffer) {
+  async createArchive(faviconImages: IFaviconImages[]) {
     const archive = archiver('zip', { zlib: { level: 9 } });
 
     const outputStream = fs.createWriteStream('imgazilla.zip');
     archive.pipe(outputStream);
 
-    archive.append(imageBuffer, { name: 'favicon.ico' });
+    for (const faviconImage of faviconImages) {
+      archive.append(faviconImage.buffer, { name: faviconImage.name });
+    }
 
     return new Promise((resolve, reject) => {
       outputStream.on('close', () => {

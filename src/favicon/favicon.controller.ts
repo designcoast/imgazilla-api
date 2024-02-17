@@ -32,14 +32,14 @@ export class FaviconController {
     @Res({ passthrough: true }) res: Response,
   ): Promise<any> {
     try {
-      const iconBuffer = await this.faviconService.generateFavicon(
+      const faviconImages = await this.faviconService.generateFavicon(
         image.buffer,
         options,
       );
 
-      // console.log('iconBuffer', iconBuffer);
+      // console.log('faviconImages', faviconImages);
       // return iconBuffer;
-      const buffer = await this.faviconService.createArchive(iconBuffer[0]);
+      const buffer = await this.faviconService.createArchive(faviconImages);
       res.send(buffer);
     } catch (error) {
       throw new BadRequestException(error.message);
