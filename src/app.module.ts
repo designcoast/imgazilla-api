@@ -5,10 +5,10 @@ import { FaviconController } from './favicon/favicon.controller';
 import { FaviconService } from './favicon/favicon.service';
 import { ArchiveModule } from './archive/archive.module';
 import { AccountModule } from './account/account.module';
-import { ImageOptimisationModule } from './image-optimisation/image-optimisation.module';
+import { ImageModule } from './image/image.module';
 
 @Module({
-  imports: [ArchiveModule, AccountModule, ImageOptimisationModule],
+  imports: [ArchiveModule, AccountModule, ImageModule],
   controllers: [AppController, FaviconController],
   providers: [AppService, FaviconService],
 })
