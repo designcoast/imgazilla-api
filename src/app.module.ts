@@ -6,9 +6,10 @@ import { FaviconService } from './favicon/favicon.service';
 import { ArchiveModule } from './archive/archive.module';
 import { AccountModule } from './account/account.module';
 import { ImageModule } from './image/image.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
-  imports: [ArchiveModule, AccountModule, ImageModule],
+  imports: [ArchiveModule, AccountModule, ImageModule, DatabaseModule],
   controllers: [AppController, FaviconController],
   providers: [AppService, FaviconService],
 })
