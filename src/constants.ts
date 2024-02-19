@@ -17,6 +17,13 @@ export const PLATFORMS = {
   IOS: 'ios',
 };
 
+export const IMAGE_OPTIMISATION_FORMATS = {
+  JPEG: 'jpeg',
+  JPG: 'jpg',
+  PNG: 'png',
+  WebP: 'webp',
+} as const;
+
 export const ICONS_OPTIONS = [
   { name: 'favicon.ico', ...getIconProperties(16, 24, 32, 48, 64) },
   { name: 'favicon-16x16.png', ...getIconProperty(16) },
