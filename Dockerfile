@@ -1,8 +1,5 @@
-# Use the official Node.js 16 image as base
+# Use the official Node.js 21 image as base
 FROM node:21.1.0-alpine
-
-# Install yarn
-RUN npm install -g yarn
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -11,7 +8,7 @@ WORKDIR /app
 COPY package*.json yarn.lock ./
 
 # Install dependencies using yarn
-RUN yarn install
+RUN yarn install --ignore-engines --production
 
 # Copy the rest of your application code
 COPY . .
@@ -23,4 +20,4 @@ RUN yarn build
 EXPOSE 3000
 
 # Command to run your application
-CMD ["yarn", "start:prod"]
+CMD [ "npm", "run", "start:prod" ]

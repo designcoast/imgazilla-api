@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 
 @Controller('account')
 export class AccountController {
@@ -7,4 +7,6 @@ export class AccountController {
   async check(): Promise<any> {
     return 'check user account';
   }
+  @Post('create')
+  async createUserAccount(): Promise<any> {}
 }
