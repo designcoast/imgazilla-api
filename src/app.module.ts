@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -13,17 +14,32 @@ import { CoinModule } from '~/coin/coin.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mongodb',
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DATABASE,
-      autoLoadEntities: true,
-
-      synchronize: process.env.NODE_ENV !== 'production',
-      logging: process.env.NODE_ENV !== 'production',
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'mongodb',
+        autoLoadEntities: true,
+        url:
+          configService.get('NODE_ENV') === 'production'
+            ? `mongodb://${configService.get(
+                'MONGO_INITDB_ROOT_USERNAME',
+              )}:${configService.get(
+                'MONGO_INITDB_ROOT_PASSWORD',
+              )}@mongodb:${configService.get(
+                'MONGO_DB_PORT',
+              )}/${configService.get('MONGO_INITDB_DATABASE')}?authSource=admin`
+            : `mongodb://${configService.get(
+                'MONGO_INITDB_ROOT_USERNAME',
+              )}:${configService.get(
+                'MONGO_INITDB_ROOT_PASSWORD',
+              )}@${configService.get('MONGO_DB_URL')}:${configService.get(
+                'MONGO_DB_PORT',
+              )}/${configService.get(
+                'MONGO_INITDB_DATABASE',
+              )}?authSource=admin`,
+      }),
     }),
     ArchiveModule,
     AccountModule,

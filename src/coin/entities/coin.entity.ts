@@ -14,8 +14,10 @@ export class CoinEntity {
   @PrimaryGeneratedColumn('uuid')
   id: number;
 
-  @OneToOne(() => AccountEntity)
-  @JoinColumn()
+  @OneToOne(() => AccountEntity, (account) => account.figmaUserID, {
+    cascade: true,
+  })
+  @JoinColumn({ name: 'figmaUserID' })
   account: AccountEntity;
 
   @Column()
