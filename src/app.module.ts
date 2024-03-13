@@ -8,8 +8,6 @@ import { FaviconService } from './favicon/favicon.service';
 import { ArchiveModule } from './archive/archive.module';
 import { AccountModule } from './account/account.module';
 import { ImageModule } from './image/image.module';
-import { CoinService } from '~/coin/coin.service';
-import { CoinModule } from '~/coin/coin.module';
 import { DatabaseModule } from '~/database/database.module';
 
 @Module({
@@ -19,9 +17,8 @@ import { DatabaseModule } from '~/database/database.module';
     ArchiveModule,
     AccountModule,
     ImageModule,
-    CoinModule,
   ],
   controllers: [AppController, FaviconController],
-  providers: [AppService, FaviconService, CoinService],
+  providers: [AppService, FaviconService],
 })
 export class AppModule {}

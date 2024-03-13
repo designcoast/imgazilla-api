@@ -3,27 +3,38 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ObjectIdColumn,
   OneToOne,
   PrimaryColumn,
-  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
-import { CoinEntity } from '~/coin/entities/coin.entity';
+import { AccountCoinEntity } from '~/account/entities/accountCoins.entity';
+import { IsDateString, IsNotEmpty, IsString } from 'class-validator';
 
-@Entity()
+@Entity('Account')
 export class AccountEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @ObjectIdColumn()
   id: number;
 
-  @Column()
-  firstName: string;
+  @IsString()
+  @Column({ nullable: true })
+  name: string;
 
+  @IsNotEmpty()
+  @IsString()
+  @Column({ nullable: false })
   @PrimaryColumn()
   figmaUserID: string;
 
-  // @OneToOne(() => CoinEntity, (coin) => coin.count)
-  // @JoinColumn()
-  // coin: number;
+  @OneToOne(() => AccountCoinEntity, (coin) => coin.account)
+  @JoinColumn()
+  coin: AccountCoinEntity;
 
+  @IsDateString()
   @CreateDateColumn()
-  createdAt: Date;
+  createAt: Date;
+
+  @IsDateString()
+  @UpdateDateColumn()
+  updateAt: Date;
 }
