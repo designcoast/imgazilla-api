@@ -2,19 +2,18 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   ObjectIdColumn,
-  OneToOne,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { AccountCoinEntity } from '~/account/entities/accountCoins.entity';
-import { IsDateString, IsNotEmpty, IsString } from 'class-validator';
+
+import { IsDateString, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { DEFAULT_COINS_NUMBER } from '~/constants';
 
 @Entity('Account')
 export class AccountEntity {
   @ObjectIdColumn()
-  id: number;
+  id: string;
 
   @IsString()
   @Column({ nullable: true })
@@ -22,13 +21,14 @@ export class AccountEntity {
 
   @IsNotEmpty()
   @IsString()
-  @Column({ nullable: false })
+  @Column({ name: 'figma_user_id', type: 'string', nullable: false })
   @PrimaryColumn()
   figmaUserID: string;
 
-  @OneToOne(() => AccountCoinEntity, (coin) => coin.account)
-  @JoinColumn()
-  coin: AccountCoinEntity;
+  @IsNotEmpty()
+  @IsNumber()
+  @Column({ name: 'coins_count', type: 'string', default: '30' })
+  coinsCount: string = DEFAULT_COINS_NUMBER;
 
   @IsDateString()
   @CreateDateColumn()
