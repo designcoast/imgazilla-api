@@ -9,10 +9,12 @@ import {
 
 import { IsDateString, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { DEFAULT_COINS_NUMBER } from '~/constants';
+import { Exclude } from 'class-transformer';
 
 @Entity('Account')
 export class AccountEntity {
-  @ObjectIdColumn()
+  @Exclude()
+  @ObjectIdColumn({ select: false })
   id: string;
 
   @IsString()
@@ -34,11 +36,13 @@ export class AccountEntity {
   @Column({ name: 'coins_count', type: 'string', default: '30' })
   coinsCount: string = DEFAULT_COINS_NUMBER;
 
+  @Exclude()
   @IsDateString()
-  @CreateDateColumn()
+  @CreateDateColumn({ select: false })
   createAt: Date;
 
+  @Exclude()
   @IsDateString()
-  @UpdateDateColumn()
+  @UpdateDateColumn({ select: false })
   updateAt: Date;
 }

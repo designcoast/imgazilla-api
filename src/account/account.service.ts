@@ -12,7 +12,10 @@ export class AccountService {
   ) {}
 
   async findAccountByFigmaUserId(id: string): Promise<AccountEntity> {
-    return await this.accountRepository.findOneBy({ figmaUserID: id });
+    return await this.accountRepository.findOne({
+      select: ['name', 'photoUrl', 'figmaUserID', 'coinsCount'],
+      where: { figmaUserID: id },
+    });
   }
 
   async createAccount(input: {
