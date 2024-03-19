@@ -18,11 +18,13 @@ export class AccountService {
   async createAccount(input: {
     figmaUserID: string;
     name: string;
+    photoUrl: string;
   }): Promise<AccountEntity> {
     return await this.accountRepository.save({
       figmaUserID: input.figmaUserID,
       name: input.name,
       coinsCount: DEFAULT_COINS_NUMBER,
+      photoUrl: input?.photoUrl,
     });
   }
 }

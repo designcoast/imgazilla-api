@@ -19,6 +19,10 @@ export class AccountEntity {
   @Column({ nullable: true })
   name: string;
 
+  @IsString()
+  @Column({ nullable: true })
+  photoUrl: string;
+
   @IsNotEmpty()
   @IsString()
   @Column({ name: 'figma_user_id', type: 'string', nullable: false })

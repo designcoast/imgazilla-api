@@ -6,4 +6,7 @@ export class CreateAccountDto {
 
   @IsString()
   name: string;
+
+  @IsString()
+  photoUrl: string;
 }
