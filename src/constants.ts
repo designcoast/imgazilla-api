@@ -48,4 +48,5 @@ export const IOS_ICON_OPTIONS = [
   { name: 'apple-touch-icon-precomposed.png', ...getOpaqueIconOptions(180) },
 ];
 
-export const DEFAULT_COINS_NUMBER = process.env.DEFAULT_COINS_NUMBER || '30';
+export const DEFAULT_CREDITS_NUMBER =
+  process.env.DEFAULT_CREDITS_NUMBER || '30';

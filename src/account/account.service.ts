@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccountEntity } from '~/account/entities/account.entity';
 import { Repository } from 'typeorm';
-import { DEFAULT_COINS_NUMBER } from '~/constants';
+import { DEFAULT_CREDITS_NUMBER } from '~/constants';
 
 @Injectable()
 export class AccountService {
@@ -13,7 +13,7 @@ export class AccountService {
 
   async findAccountByFigmaUserId(id: string): Promise<AccountEntity> {
     return await this.accountRepository.findOne({
-      select: ['name', 'photoUrl', 'figmaUserID', 'coinsCount'],
+      select: ['name', 'photoUrl', 'figmaUserID', 'credits'],
       where: { figmaUserID: id },
     });
   }
@@ -26,7 +26,7 @@ export class AccountService {
     return await this.accountRepository.save({
       figmaUserID: input.figmaUserID,
       name: input.name,
-      coinsCount: DEFAULT_COINS_NUMBER,
+      credits: DEFAULT_CREDITS_NUMBER,
       photoUrl: input?.photoUrl,
     });
   }

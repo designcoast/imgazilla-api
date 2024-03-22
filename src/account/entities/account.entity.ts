@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 import { IsDateString, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { DEFAULT_COINS_NUMBER } from '~/constants';
+import { DEFAULT_CREDITS_NUMBER } from '~/constants';
 import { Exclude } from 'class-transformer';
 
 @Entity('Account')
@@ -33,8 +33,8 @@ export class AccountEntity {
 
   @IsNotEmpty()
   @IsNumber()
-  @Column({ name: 'coins_count', type: 'string', default: '30' })
-  coinsCount: string = DEFAULT_COINS_NUMBER;
+  @Column({ name: 'credits', type: 'string', default: '30' })
+  credits: string = DEFAULT_CREDITS_NUMBER;
 
   @Exclude()
   @IsDateString()
