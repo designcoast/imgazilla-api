@@ -12,7 +12,7 @@ export const BITMAP_SIZE = 40;
 
 // TODO: Add more platforms
 export const PLATFORMS = {
-  FAVICON: 'favicon',
+  FAVICON: 'default',
   ANDROID: 'android',
   IOS: 'ios',
 };

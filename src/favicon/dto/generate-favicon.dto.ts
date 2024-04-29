@@ -1,13 +1,15 @@
 import * as yup from 'yup';
-import { PLATFORMS } from '~/constants';
+
+const platformsSchema = yup.object().shape({
+  default: yup.boolean().default(true),
+  iOS: yup.boolean(),
+  android: yup.boolean(),
+});
 
 export const generateFaviconOptionsSchema = yup.object({
-  appName: yup.string().required(),
-  themeColor: yup.string().required(),
-  platforms: yup
-    .array()
-    .of(yup.string().oneOf(Object.values(PLATFORMS)).min(1).required())
-    .required(),
+  websiteName: yup.string().default('imgazilla'),
+  themeColor: yup.string().default('#FFF'),
+  platforms: platformsSchema,
 });
 
 export type GenerateFaviconOptionsDto = yup.InferType<

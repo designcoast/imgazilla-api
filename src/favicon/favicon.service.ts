@@ -16,6 +16,7 @@ import {
 import { IFaviconImages, IIconOptions } from '~/types';
 import { getPlatformOptions } from '~/utils/platforms.utils';
 import { getIconOptions } from '~/config/icon.config';
+import { stringToBoolean } from '~/utils/stringToBoolean.utils';
 
 export interface ISourceSet {
   imgBuffer: Buffer;
@@ -37,7 +38,11 @@ export class FaviconService {
 
     const responses = [];
 
-    for (const platform of platforms) {
+    const selectedPlatforms = Object.keys(platforms).filter((key) =>
+      stringToBoolean(platforms[key]),
+    );
+
+    for (const platform of selectedPlatforms) {
       const platformOptions = getPlatformOptions(platform);
 
       const result = await Promise.all(
