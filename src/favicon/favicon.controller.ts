@@ -7,7 +7,6 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-
 import {
   GenerateFaviconOptionsDto,
   generateFaviconOptionsSchema,
