@@ -142,14 +142,20 @@ const createDib = (image: any) => {
   const buf = Buffer.alloc(width * height * 4);
 
   for (let y = 0; y < height; ++y) {
-    for (let x = 0; x < width; ++x) {
+    for (let x = 0; x < height; ++x) {
       const offset = (y * width + x) * 4;
-      const pos = ((height - y - 1) * width + x) * 4;
+      const r = imageData.readUInt8(offset);
+      const g = imageData.readUInt8(offset + 1);
+      const b = imageData.readUInt8(offset + 2);
+      const a = imageData.readUInt8(offset + 3);
+      const pos = (height - y - 1) * width + x;
 
-      buf.writeUInt32LE(imageData.readUInt32LE(offset), pos);
+      buf.writeUInt8(b, pos * 4);
+      buf.writeUInt8(g, pos * 4 + 1);
+      buf.writeUInt8(r, pos * 4 + 2);
+      buf.writeUInt8(a, pos * 4 + 3);
     }
   }
-
   return buf;
 };
 

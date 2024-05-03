@@ -8,7 +8,7 @@ const platformsSchema = yup.object().shape({
 
 export const generateFaviconOptionsSchema = yup.object({
   websiteName: yup.string().default('imgazilla'),
-  themeColor: yup.string().default('#FFF'),
+  themeColor: yup.string().default('#FFFFFF'),
   platforms: platformsSchema,
 });
 
