@@ -1,9 +1,7 @@
-import * as fs from 'fs';
 import { extname } from 'path';
 import { Injectable } from '@nestjs/common';
 
 import * as sharp from 'sharp';
-import * as archiver from 'archiver';
 
 import { GenerateFaviconOptionsDto } from './dto/generate-favicon.dto';
 import {
@@ -78,32 +76,4 @@ export class FaviconService {
       return { name: options.name, buffer };
     }
   }
-  private getPlatform() {}
-
-  async createArchive(faviconImages: IFaviconImages[]) {
-    const archive = archiver('zip', { zlib: { level: 9 } });
-
-    const outputStream = fs.createWriteStream('imgazilla.zip');
-    archive.pipe(outputStream);
-
-    for (const faviconImage of faviconImages) {
-      archive.append(faviconImage.buffer, { name: faviconImage.name });
-    }
-
-    return new Promise((resolve, reject) => {
-      outputStream.on('close', () => {
-        fs.readFile('imgazilla.zip', (err, data) => {
-          resolve(data);
-        });
-      });
-
-      archive.on('error', (error) => {
-        reject(error);
-      });
-
-      archive.finalize();
-    });
-  }
-
-  private getHtml() {}
 }

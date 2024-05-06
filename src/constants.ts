@@ -45,8 +45,19 @@ export const IOS_ICON_OPTIONS = [
   { name: 'apple-touch-icon-180x180.png', ...getOpaqueIconOptions(180) },
   { name: 'apple-touch-icon-1024x1024.png', ...getOpaqueIconOptions(1024) },
   { name: 'apple-touch-icon.png', ...getOpaqueIconOptions(180) },
-  { name: 'apple-touch-icon-precomposed.png', ...getOpaqueIconOptions(180) },
-];
+] as IIconOptions[];
+
+export const ANDROID_ICONS_OPTIONS = [
+  { name: 'android-chrome-36x36.png', ...getIconProperty(36) },
+  { name: 'android-chrome-48x48.png', ...getIconProperty(48) },
+  { name: 'android-chrome-72x72.png', ...getIconProperty(72) },
+  { name: 'android-chrome-96x96.png', ...getIconProperty(96) },
+  { name: 'android-chrome-144x144.png', ...getIconProperty(144) },
+  { name: 'android-chrome-192x192.png', ...getIconProperty(192) },
+  { name: 'android-chrome-256x256.png', ...getIconProperty(256) },
+  { name: 'android-chrome-384x384.png', ...getIconProperty(384) },
+  { name: 'android-chrome-512x512.png', ...getIconProperty(512) },
+] as IIconOptions[];
 
 export const DEFAULT_CREDITS_NUMBER =
   process.env.DEFAULT_CREDITS_NUMBER || '30';
