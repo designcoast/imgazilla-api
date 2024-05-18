@@ -2,7 +2,7 @@ import {
   getIconProperties,
   getIconProperty,
   getOpaqueIconOptions,
-} from '~/config/icon.config';
+} from '~/configs/icon.config';
 import { IIconOptions } from '~/types';
 
 export const HEADER_SIZE = 6;
