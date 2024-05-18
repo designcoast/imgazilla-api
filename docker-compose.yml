@@ -33,6 +33,27 @@ services:
     networks:
       - nestjs-net
 
+  redis:
+    image: redis:latest
+    container_name: redis
+    command: redis-server --requirepass dev
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_DATABASE_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_DATABASE_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DATABASE_NAME}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
 networks:
   nestjs-net:
 
