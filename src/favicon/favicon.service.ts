@@ -13,7 +13,7 @@ import {
 } from '~/utils/icons.utils';
 import { IFaviconImages, IIconOptions } from '~/types';
 import { getPlatformOptions } from '~/utils/platforms.utils';
-import { getIconOptions } from '~/config/icon.config';
+import { getIconOptions } from '~/configs/icon.config';
 import { stringToBoolean } from '~/utils/stringToBoolean.utils';
 
 export interface ISourceSet {
