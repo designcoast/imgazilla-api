@@ -9,12 +9,8 @@ services:
       - "3000:3000"
     depends_on:
       - mongodb
-    environment:
-      MONGO_DB_PORT: ${MONGO_DB_PORT}
-      MONGO_DB_URL: ${MONGO_DB_URL}
-      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      - redis
+      - postgres
     networks:
       - nestjs-net
 
@@ -35,16 +31,18 @@ services:
 
   redis:
     image: redis:latest
-    container_name: redis
+    container_name: imgazilla-redis
     command: redis-server --requirepass dev
     ports:
       - '6379:6379'
     volumes:
       - redis_data:/data
+    networks:
+      - nestjs-net
 
   postgres:
     image: postgres:latest
-    container_name: postgres
+    container_name: imgazilla-postgres
     environment:
       POSTGRES_USER: ${POSTGRES_DATABASE_USER}
       POSTGRES_PASSWORD: ${POSTGRES_DATABASE_PASSWORD}
@@ -53,9 +51,13 @@ services:
       - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - nestjs-net
 
 networks:
   nestjs-net:
 
 volumes:
   mongodb-data:
+  postgres_data:
+  redis_data:
