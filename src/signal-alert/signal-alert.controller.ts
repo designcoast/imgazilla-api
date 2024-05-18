@@ -9,7 +9,7 @@ export class SignalAlertController {
   @Post('notify')
   async notify(@Body() body: { message: string }) {
     try {
-      await this.signalAlertService.logCriticalIssue(body.message);
+      await this.signalAlertService.sendAlert(body.message);
 
       return {
         status: HttpStatus.OK,

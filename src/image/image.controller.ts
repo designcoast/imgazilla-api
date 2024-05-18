@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -22,6 +23,7 @@ export class ImageController {
     @Body(new YupValidationPipe(imageOptimizationSchema))
     options: IImageOptimizationOptions,
   ) {
-    return await this.imageService.optimizeImage(image.buffer, options);
+    console.log('image', image);
+    // return await this.imageService.optimizeImage(image.buffer, options);
   }
 }

@@ -4398,6 +4398,11 @@ neo-async@^2.6.2:
   resolved "https://registry.npmjs.org/neo-async/-/neo-async-2.6.2.tgz"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
+nestjs-grammy@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/nestjs-grammy/-/nestjs-grammy-0.0.3.tgz#8da0ee4aa17cf5be513bab26ba5b61bd686c01ea"
+  integrity sha512-l1/45Jtp/VHAlCbh2dnOa2nt1HhYfMjORhXyDKc1FsRtzrbhqWHsGEPekPv93Q3yS7YdadZ5GGber6r36ZjaEQ==
+
 node-abort-controller@^3.0.1, node-abort-controller@^3.1.1:
   version "3.1.1"
   resolved "https://registry.npmjs.org/node-abort-controller/-/node-abort-controller-3.1.1.tgz"
