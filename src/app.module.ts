@@ -34,9 +34,9 @@ import { SignalLoggerService } from '~/loggers/signal-logger.service';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         connection: {
-          host: configService.get(''),
-          port: configService.get(''),
-          password: configService.get(''),
+          host: configService.get('BULL_REDIS_HOST'),
+          port: configService.get('BULL_REDIS_PORT'),
+          password: configService.get('BULL_REDIS_PASSWORD'),
         },
       }),
     }),
