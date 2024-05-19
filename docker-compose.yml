@@ -31,6 +31,7 @@ services:
 
   redis:
     image: redis:latest
+    restart: always
     container_name: imgazilla-redis
     command: redis-server --requirepass dev
     ports:
