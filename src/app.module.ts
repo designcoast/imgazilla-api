@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-
-import { BullModule } from '@nestjs/bullmq';
+import { ConfigModule } from '@nestjs/config';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -25,27 +23,18 @@ import { TelegramModule } from '~/telegram/telegram.module';
 
 import { ExceptionsFilter } from '~/filters/exceptions.filter';
 import { SignalLoggerService } from '~/loggers/signal-logger.service';
+import { ImageQueueModule } from '~/queue/image-queue.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    BullModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        connection: {
-          host: configService.get('BULL_REDIS_HOST'),
-          port: configService.get('BULL_REDIS_PORT'),
-          password: configService.get('BULL_REDIS_PASSWORD'),
-        },
-      }),
-    }),
     DatabaseModule,
     ArchiveModule,
     AccountModule,
     ImageModule,
     SignalAlertModule,
     TelegramModule,
+    ImageQueueModule,
   ],
   controllers: [AppController, FaviconController],
   providers: [
