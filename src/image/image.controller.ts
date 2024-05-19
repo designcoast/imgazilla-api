@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Get,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -17,11 +16,11 @@ export class ImageController {
   constructor(private readonly imageService: ImageService) {}
 
   @Post('optimize')
-  @UseInterceptors(FileInterceptor('image'))
+  // @UseInterceptors(FileInterceptor('image'))
   async optimizeImage(
-    @UploadedFile() image: Express.Multer.File,
-    @Body(new YupValidationPipe(imageOptimizationSchema))
-    options: IImageOptimizationOptions,
+    // @UploadedFile() image: Express.Multer.File,
+    @Body() image: any,
+    // options: IImageOptimizationOptions,
   ) {
     console.log('image', image);
     // return await this.imageService.optimizeImage(image.buffer, options);

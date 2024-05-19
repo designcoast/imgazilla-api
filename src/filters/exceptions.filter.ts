@@ -9,10 +9,12 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { SignalLoggerService } from '~/loggers/signal-logger.service';
+import { ConfigService } from '@nestjs/config';
 
 @Catch()
 export class ExceptionsFilter implements ExceptionFilter {
   private readonly logger = new Logger(ExceptionsFilter.name);
+  private readonly configService = new ConfigService();
 
   constructor(
     @Inject(SignalLoggerService)
@@ -33,7 +35,13 @@ export class ExceptionsFilter implements ExceptionFilter {
     ) as string;
 
     this.logger.error(`HTTP Status: ${status}, Error Message: ${message}`);
-    await this.signalLoggerService.error(message);
+    const isEnabledNotifications = await this.configService.get(
+      'ENABLE_TELEGRAM_NOTIFICATION',
+    );
+
+    if (isEnabledNotifications) {
+      await this.signalLoggerService.error(message);
+    }
 
     response.status(status).json({
       statusCode: status,
