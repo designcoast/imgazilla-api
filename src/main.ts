@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction, json, urlencoded } from 'express';
 
 import { NestFactory } from '@nestjs/core';
 import { Logger, ValidationPipe } from '@nestjs/common';
@@ -10,7 +10,9 @@ import { ExceptionsFilter } from '~/filters/exceptions.filter';
 import { SignalLoggerService } from '~/loggers/signal-logger.service';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    rawBody: true,
+  });
   const signalLoggerService = app.get(SignalLoggerService);
   const logger = new Logger(AppModule.name);
 
@@ -35,6 +37,10 @@ async function bootstrap() {
   app.enableShutdownHooks();
 
   app.useGlobalFilters(new ExceptionsFilter(signalLoggerService));
+
+  // Configure express middleware for body size limits
+  app.use(json({ limit: '10mb' })); // Start with a 10 MB limit
+  app.use(urlencoded({ limit: '10mb', extended: true })); // Start with a 10 MB limit
 
   app.useGlobalPipes(
     new ValidationPipe({
