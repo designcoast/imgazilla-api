@@ -1,15 +1,5 @@
-import {
-  Body,
-  Controller,
-  Post,
-  UploadedFile,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { ImageService } from '~/image/image.service';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { YupValidationPipe } from '~/pipes/yup-validation.pipe';
-import { imageOptimizationSchema } from '~/image/dto/optimaze-image.dto';
-import { IImageOptimizationOptions } from '~/types';
 
 @Controller('image')
 export class ImageController {
@@ -22,7 +12,6 @@ export class ImageController {
     @Body() image: any,
     // options: IImageOptimizationOptions,
   ) {
-    console.log('image', image);
-    // return await this.imageService.optimizeImage(image.buffer, options);
+    await this.imageService.optimizeImage(image);
   }
 }

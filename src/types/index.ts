@@ -25,3 +25,15 @@ export interface IImageOptimizationOptions {
   quality: number;
   outputFormat: OutputFormat;
 }
+
+export interface ImageOptions {
+  uuid: string;
+  width: number;
+  height: number;
+  extension: string;
+  name: string;
+  uintArray: string;
+  optimizationPercent: number;
+  isSelected: boolean;
+  size: number;
+}
