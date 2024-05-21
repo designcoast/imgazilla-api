@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-// import { BullModule } from '@nestjs/bull';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BullModule } from '@nestjs/bullmq';
+
 import { ImageQueueProcessor } from '~/queue/image.processor';
 import { ImageService } from '~/image/image.service';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ImageQueueEvents } from '~/queue/image.queue-events';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       name: 'image-processing',
     }),
   ],
-  providers: [ImageQueueProcessor, ImageService],
+  providers: [ImageQueueEvents, ImageQueueProcessor, ImageService],
+  exports: [BullModule],
 })
 export class ImageQueueModule {}
