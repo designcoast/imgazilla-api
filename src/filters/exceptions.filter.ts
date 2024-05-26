@@ -25,6 +25,9 @@ export class ExceptionsFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
+    const isEnabledNotifications = await this.configService.get(
+      'ENABLE_TELEGRAM_NOTIFICATION',
+    );
     const status =
       exception instanceof HttpException
         ? exception.getStatus()
@@ -35,11 +38,8 @@ export class ExceptionsFilter implements ExceptionFilter {
     ) as string;
 
     this.logger.error(`HTTP Status: ${status}, Error Message: ${message}`);
-    const isEnabledNotifications = await this.configService.get(
-      'ENABLE_TELEGRAM_NOTIFICATION',
-    );
 
-    if (isEnabledNotifications) {
+    if (!Boolean(isEnabledNotifications)) {
       await this.signalLoggerService.error(message);
     }
 
