@@ -1,4 +1,3 @@
-import { AvailableFormatInfo, FormatEnum } from 'sharp';
 import { IMAGE_OPTIMISATION_FORMATS } from '~/constants';
 
 export interface IIconOptions {
@@ -21,19 +20,7 @@ export interface IFaviconImages {
 export type OutputFormat =
   (typeof IMAGE_OPTIMISATION_FORMATS)[keyof typeof IMAGE_OPTIMISATION_FORMATS];
 
-export interface IImageOptimizationOptions {
-  quality: number;
-  outputFormat: OutputFormat;
-}
-
-export interface ImageOptions {
-  uuid: string;
-  width: number;
-  height: number;
-  extension: string;
-  name: string;
-  uintArray: string;
-  optimizationPercent: number;
-  isSelected: boolean;
-  size: number;
+export interface ImageOptimizationResult {
+  base64Image: string;
+  optimizedImageSize: string;
 }
