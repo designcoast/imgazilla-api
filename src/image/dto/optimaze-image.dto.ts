@@ -1,14 +1,13 @@
 import * as yup from 'yup';
-import { IMAGE_OPTIMISATION_FORMATS } from '~/constants';
 
-export const imageOptimizationSchema = yup.object({
-  outputFormat: yup
-    .string()
-    .oneOf(Object.values(IMAGE_OPTIMISATION_FORMATS))
-    .required(),
-  quality: yup.number().required(),
+export const options = yup.object({
+  uuid: yup.string(),
+  extension: yup.string(),
+  name: yup.string(),
+  base64Image: yup.string(),
+  optimizationPercent: yup.number(),
 });
 
-export type ImageOptimizationDto = yup.InferType<
-  typeof imageOptimizationSchema
->;
+export const imageOptimizationSchema = yup.array().of(options);
+
+export type ImageOptimizationDto = yup.InferType<typeof options>;
