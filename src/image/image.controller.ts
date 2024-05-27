@@ -15,7 +15,7 @@ export class ImageController {
   async optimizeImage(
     @Body(new YupValidationPipe(imageOptimizationSchema))
     image: ImageOptimizationDto[],
-  ): Promise<string> {
+  ): Promise<{ jobId: string }> {
     return await this.imageService.optimizeImage(image);
   }
 

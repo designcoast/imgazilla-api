@@ -12,13 +12,17 @@ export class ImageService {
   constructor(
     @InjectQueue('image-processing') private readonly processingQueue: Queue,
   ) {}
-  async optimizeImage(data: ImageOptimizationDto[]): Promise<string> {
-    const chunkId = uuid();
-    await this.processingQueue.add(chunkId, data, {
-      jobId: chunkId,
+  async optimizeImage(
+    data: ImageOptimizationDto[],
+  ): Promise<{ jobId: string }> {
+    const jobId = uuid();
+    await this.processingQueue.add(jobId, data, {
+      jobId,
     });
 
-    return chunkId;
+    return {
+      jobId,
+    };
   }
 
   async getImageStatus(id: string) {
