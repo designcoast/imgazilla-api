@@ -10,6 +10,8 @@ export const DIRECTORY_SIZE = 16;
 export const COLOR_MODE = 0;
 export const BITMAP_SIZE = 40;
 
+export const DEFAULT_BITE_SIZE = 1024;
+
 // TODO: Add more platforms
 export const PLATFORMS = {
   FAVICON: 'default',
