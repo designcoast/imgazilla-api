@@ -33,21 +33,36 @@ export class ExceptionsFilter implements ExceptionFilter {
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    const message = (
+    const messageException = (
       exception instanceof HttpException ? exception.getResponse() : exception
-    ) as string;
+    ) as any;
 
-    this.logger.error(`HTTP Status: ${status}, Error Message: ${message}`);
+    let message = '';
+
+    if (typeof messageException === 'string') {
+      message = messageException;
+    } else if (
+      typeof messageException === 'object' &&
+      messageException?.message
+    ) {
+      message = Array.isArray(messageException.message)
+        ? messageException.message.join(', ')
+        : messageException.message;
+    }
+
+    const errorMessage = `HTTP Status: ${status}, Error Message: ${message}, Endpoint: ${request.url}`;
+
+    this.logger.error(errorMessage);
 
     if (!Boolean(isEnabledNotifications)) {
-      await this.signalLoggerService.error(message);
+      await this.signalLoggerService.error(errorMessage);
     }
 
     response.status(status).json({
       statusCode: status,
       timestamp: new Date().toISOString(),
       path: request.url,
-      message: typeof message === 'string' ? message : (message as any).message,
+      message: message,
     });
   }
 }
