@@ -2,7 +2,7 @@
   "name": "imgazilla-api",
   "version": "0.0.1",
   "description": "API for imgazilla Figma plugin",
-  "author": "designcoast team",
+  "author": "imgazilla team",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
