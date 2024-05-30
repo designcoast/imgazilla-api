@@ -15,6 +15,7 @@ import { IFaviconImages, IIconOptions } from '~/types';
 import { getPlatformOptions } from '~/utils/platforms.utils';
 import { getIconOptions } from '~/configs/icon.config';
 import { stringToBoolean } from '~/utils/stringToBoolean.utils';
+import { decode } from 'base64-arraybuffer';
 
 export interface ISourceSet {
   imgBuffer: Buffer;
@@ -24,10 +25,11 @@ export interface ISourceSet {
 @Injectable()
 export class FaviconService {
   async generateFavicon(
-    imageBuffer: Buffer,
-    options: GenerateFaviconOptionsDto,
+    imageOptions: GenerateFaviconOptionsDto,
   ): Promise<IFaviconImages[]> {
-    const { platforms } = options;
+    const { image, platforms } = imageOptions;
+
+    const imageBuffer = Buffer.from(decode(image));
 
     const source = {
       imgBuffer: imageBuffer,

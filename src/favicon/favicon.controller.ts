@@ -1,12 +1,4 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  Post,
-  UploadedFile,
-  UseInterceptors,
-} from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { Body, Controller, Post } from '@nestjs/common';
 import {
   GenerateFaviconOptionsDto,
   generateFaviconOptionsSchema,
@@ -19,21 +11,15 @@ export class FaviconController {
   constructor(private readonly faviconService: FaviconService) {}
 
   @Post('generate')
-  @UseInterceptors(FileInterceptor('image'))
   async generateFavicon(
-    @UploadedFile() image: Express.Multer.File,
     @Body(new YupValidationPipe(generateFaviconOptionsSchema))
-    options: GenerateFaviconOptionsDto,
+    imageOptions: GenerateFaviconOptionsDto,
   ): Promise<
     {
       name: string;
       buffer: Uint8Array;
     }[]
   > {
-    try {
-      return await this.faviconService.generateFavicon(image.buffer, options);
-    } catch (error) {
-      throw new BadRequestException(error.message);
-    }
+    return await this.faviconService.generateFavicon(imageOptions);
   }
 }
