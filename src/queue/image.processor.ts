@@ -6,7 +6,7 @@ import * as sharp from 'sharp';
 import { decode, encode } from 'base64-arraybuffer';
 
 import { getImageOptimizationFnByFormat } from '~/image/image.utils';
-import { IMAGE_OPTIMISATION_FORMATS } from '~/constants';
+import { DEFAULT_BITE_SIZE, IMAGE_OPTIMISATION_FORMATS } from '~/constants';
 import { ImageOptimizationDto } from '~/image/dto/optimaze-image.dto';
 
 @Processor('image-processing')
@@ -18,6 +18,8 @@ export class ImageQueueProcessor extends WorkerHost {
       return await Promise.all(
         job.data.map(
           async ({
+            name,
+            uuid,
             base64Image,
             optimizationPercent,
           }: ImageOptimizationDto) => {
@@ -30,12 +32,18 @@ export class ImageQueueProcessor extends WorkerHost {
               IMAGE_OPTIMISATION_FORMATS.PNG,
             )(imageProcessor, optimizationPercent).toBuffer();
 
+            const sourceImageInBytes = buffer.byteLength;
+            const sourceImageSize = sourceImageInBytes / DEFAULT_BITE_SIZE;
+
             const sizeInBytes = imageBuffer.length;
-            const sizeInKB = sizeInBytes / 1024;
+            const sizeInKB = sizeInBytes / DEFAULT_BITE_SIZE;
 
             return {
+              uuid,
+              name,
               base64Image: encode(imageBuffer),
               optimizedImageSize: sizeInKB,
+              sourceImageSize,
             };
           },
         ),
