@@ -8,6 +8,14 @@ export const getImageOptimizationFnByFormat = (format: OutputFormat) => {
       imageProcessor: Sharp,
       quality: number,
     ) => imageProcessor.png({ quality }),
+    [IMAGE_OPTIMISATION_FORMATS.JPG]: (
+      imageProcessor: Sharp,
+      quality: number,
+    ) => imageProcessor.jpeg({ quality }),
+    // [IMAGE_OPTIMISATION_FORMATS.SVG]: (
+    //   imageProcessor: Sharp,
+    //   quality: number,
+    // ) => imageProcessor.jpeg({ quality }),
   };
 
   return optimizationFnMap[format];

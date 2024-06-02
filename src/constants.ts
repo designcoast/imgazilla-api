@@ -23,7 +23,9 @@ export const IMAGE_OPTIMISATION_FORMATS = {
   JPEG: 'jpeg',
   JPG: 'jpg',
   PNG: 'png',
+  SVG: 'svg',
   WebP: 'webp',
+  PDF: 'pdf',
 } as const;
 
 export const ICONS_OPTIONS = [
