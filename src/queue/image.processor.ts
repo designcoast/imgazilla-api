@@ -49,6 +49,7 @@ export class ImageQueueProcessor extends WorkerHost {
               name: settings?.suffix ? `${name}_${settings.suffix}` : name,
               base64Image: encode(processedBuffer),
               optimizedImageSize: sizeInKB,
+              format: fileFormat,
               sourceImageSize,
             };
 

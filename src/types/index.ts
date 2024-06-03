@@ -1,4 +1,5 @@
 import { IMAGE_OPTIMISATION_FORMATS } from '~/constants';
+import { encode } from 'base64-arraybuffer';
 
 export interface IIconOptions {
   name: string;
@@ -21,6 +22,11 @@ export type OutputFormat =
   (typeof IMAGE_OPTIMISATION_FORMATS)[keyof typeof IMAGE_OPTIMISATION_FORMATS];
 
 export interface ImageOptimizationResult {
+  uuid: string;
+  name: string;
   base64Image: string;
-  optimizedImageSize: string;
+  optimizedImageSize: number;
+  format: string;
+  sourceImageSize: number;
+  pdfBuffer?: string;
 }

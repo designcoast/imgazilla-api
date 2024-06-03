@@ -99,11 +99,6 @@ export class SVGProcessor extends ImageProcessor {
         },
       ],
     });
-
-    // if (optimizedSvg.error) {
-    //   throw new Error('Error optimizing SVG');
-    // }
-
     return Buffer.from(optimizedSvg.data, 'utf-8');
   }
 }
