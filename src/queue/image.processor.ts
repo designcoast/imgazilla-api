@@ -2,11 +2,9 @@ import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
 
 import { Job } from 'bullmq';
-// import * as sharp from 'sharp';
-import { decode, encode } from 'base64-arraybuffer';
-// import * as PDFDocument from 'pdfkit';
 
-import { getImageOptimizationFnByFormat } from '~/image/image.utils';
+import { decode, encode } from 'base64-arraybuffer';
+
 import { DEFAULT_BITE_SIZE, IMAGE_OPTIMISATION_FORMATS } from '~/constants';
 import { ImageOptimizationDto } from '~/image/dto/optimaze-image.dto';
 import { ImageProcessorFactory } from '~/factories/ImageProcessorFactory';
