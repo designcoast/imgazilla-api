@@ -2,19 +2,17 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ObjectIdColumn,
   PrimaryColumn,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { IsDateString, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { DEFAULT_CREDITS_NUMBER } from '~/constants';
 import { Exclude } from 'class-transformer';
 
 @Entity('Account')
 export class AccountEntity {
-  @Exclude()
-  @ObjectIdColumn({ select: false })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @IsString()
@@ -27,14 +25,14 @@ export class AccountEntity {
 
   @IsNotEmpty()
   @IsString()
-  @Column({ name: 'figma_user_id', type: 'string', nullable: false })
+  @Column({ name: 'figma_user_id', type: 'varchar', nullable: false })
   @PrimaryColumn()
   figmaUserID: string;
 
   @IsNotEmpty()
   @IsNumber()
-  @Column({ name: 'credits', type: 'string', default: '30' })
-  credits: string = DEFAULT_CREDITS_NUMBER;
+  @Column({ name: 'credits', type: 'varchar', default: '30' })
+  credits: string;
 
   @Exclude()
   @IsDateString()
