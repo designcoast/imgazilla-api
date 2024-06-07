@@ -24,6 +24,7 @@ import { TelegramModule } from '~/telegram/telegram.module';
 import { ExceptionsFilter } from '~/filters/exceptions.filter';
 import { SignalLoggerService } from '~/loggers/signal-logger.service';
 import { ImageQueueModule } from '~/queue/image-queue.module';
+import { BillingModule } from './billing/billing.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { ImageQueueModule } from '~/queue/image-queue.module';
     SignalAlertModule,
     TelegramModule,
     ImageQueueModule,
+    BillingModule,
   ],
   controllers: [AppController, FaviconController],
   providers: [

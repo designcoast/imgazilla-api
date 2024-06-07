@@ -808,6 +808,11 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@lemonsqueezy/lemonsqueezy.js@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@lemonsqueezy/lemonsqueezy.js/-/lemonsqueezy.js-3.0.0.tgz#34074e148ae120da411095e7ed5befef8fab47d9"
+  integrity sha512-EomAGkJLisI0/ptpe6a0plB++1Pqoe+FgMip4etfg2de05y58dkI+OA+HSdaFyXxpn1g0OtB50ofNVVoYQJX5A==
+
 "@ljharb/through@^2.3.11":
   version "2.3.12"
   resolved "https://registry.npmjs.org/@ljharb/through/-/through-2.3.12.tgz"

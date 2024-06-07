@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@grammyjs/nestjs": "^0.3.4",
+    "@lemonsqueezy/lemonsqueezy.js": "^3.0.0",
     "@nestjs/bull": "^10.1.0",
     "@nestjs/bullmq": "^10.1.1",
     "@nestjs/common": "^10.3.2",
