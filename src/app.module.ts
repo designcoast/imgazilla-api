@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 
 import { AppController } from './app.controller';
@@ -25,6 +25,7 @@ import { ExceptionsFilter } from '~/filters/exceptions.filter';
 import { SignalLoggerService } from '~/loggers/signal-logger.service';
 import { ImageQueueModule } from '~/queue/image-queue.module';
 import { BillingModule } from './billing/billing.module';
+import { HeadersGuard } from '~/guards/headers.guard';
 
 @Module({
   imports: [
@@ -46,6 +47,10 @@ import { BillingModule } from './billing/billing.module';
     {
       provide: APP_FILTER,
       useClass: ExceptionsFilter,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: HeadersGuard,
     },
     TelegramConfigService,
     {
