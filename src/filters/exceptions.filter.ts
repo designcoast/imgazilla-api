@@ -7,9 +7,12 @@ import {
   Logger,
   Inject,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
-import { SignalLoggerService } from '~/loggers/signal-logger.service';
 import { ConfigService } from '@nestjs/config';
+
+import { Request, Response } from 'express';
+import * as Sentry from '@sentry/node';
+
+import { SignalLoggerService } from '~/loggers/signal-logger.service';
 
 @Catch()
 export class ExceptionsFilter implements ExceptionFilter {
@@ -25,6 +28,9 @@ export class ExceptionsFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
+
+    Sentry.captureException(exception);
+
     const isEnabledNotifications = await this.configService.get(
       'ENABLE_TELEGRAM_NOTIFICATION',
     );

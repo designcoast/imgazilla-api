@@ -5,6 +5,7 @@ import type { NestExpressApplication } from '@nestjs/platform-express';
 import { Logger, ValidationPipe } from '@nestjs/common';
 
 import helmet from 'helmet';
+import * as Sentry from '@sentry/node';
 
 import { AppModule } from './app.module';
 import { ExceptionsFilter } from '~/filters/exceptions.filter';
@@ -16,6 +17,12 @@ async function bootstrap() {
   });
   const signalLoggerService = app.get(SignalLoggerService);
   const logger = new Logger(AppModule.name);
+
+  Sentry.init({
+    dsn: process.env.SENTRY_DNS,
+    tracesSampleRate: 1.0,
+    profilesSampleRate: 1.0,
+  });
 
   // Middleware to log request sizes
   app.use((req: Request, res: Response, next: NextFunction) => {
