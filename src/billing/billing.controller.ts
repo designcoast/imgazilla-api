@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Get,
   Headers,
   Logger,
   Post,
@@ -19,7 +18,8 @@ export class BillingController {
 
   @Post('webhook')
   async handleWebhook(
-    @Body() body: any,
+    @Body('meta') meta: any,
+    @Body('data') data: any,
     @Headers('X-Signature') signature: string,
     @Headers('X-Event-Name') eventName: string,
     @Req() request: RawBodyRequest<Request>,
@@ -32,15 +32,7 @@ export class BillingController {
       this.logger.error('Signature verification failed');
       return;
     }
-    console.log('webhook', body);
-    console.log('signature', signature);
-    console.log('eventName', eventName);
-    console.log('request.rawBody', request.rawBody);
-    // Verify the webhook signature (implement your own verification logic)
-    // if (this.paymentService.verifySignature(body, signature)) {
-    // await this.billingService.handlePaymentWebhook(body);
-    // return { message: 'Webhook processed' };
-    // }
-    // return { message: 'Invalid signature' };
+
+    return await this.billingService.handleOrder(eventName, data, meta);
   }
 }
