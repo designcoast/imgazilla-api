@@ -21,12 +21,19 @@ export class HeadersGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
     const figmaHeader = request.headers['x-figma-signature'];
-    const signatureHeader = request.headers['s-signature'];
+    const signatureHeader = request.headers['x-signature'];
 
-    if (!figmaHeader || signatureHeader) {
-      throw new ForbiddenException('Forbidden');
+    if (
+      request.headers['user-agent'] === 'LemonSqueezy-Hookshot' &&
+      signatureHeader
+    ) {
+      return true;
     }
 
-    return true;
+    if (request.headers['user-agent'].includes('Figma') && figmaHeader) {
+      return true;
+    }
+
+    throw new ForbiddenException('Forbidden');
   }
 }
