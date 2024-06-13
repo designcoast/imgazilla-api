@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction, json, urlencoded } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
 import { NestFactory } from '@nestjs/core';
 import type { NestExpressApplication } from '@nestjs/platform-express';
@@ -47,10 +47,9 @@ async function bootstrap() {
   app.useGlobalFilters(new ExceptionsFilter(signalLoggerService));
 
   // Configure express middleware for body size limits
-  // app.useBodyParser('json', { limit: '10mb' }); // Start with a 10 MB limit
-  app.use(json({ limit: '10mb' })); // Start with a 10 MB limit
-  app.use(urlencoded({ limit: '10mb', extended: true })); // Start with a 10 MB limit
-  // app.useBodyParser('urlencoded', { limit: '10mb', extended: true }); // Start with a 10 MB limit
+  app.useBodyParser('json', { limit: '10mb' }); // Start with a 10 MB limit
+  app.useBodyParser('urlencoded', { limit: '10mb', extended: true }); // Start with a 10 MB limit
+  app.useBodyParser('raw', { type: '*/*' });
 
   app.useGlobalPipes(
     new ValidationPipe({
