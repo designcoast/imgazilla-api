@@ -65,3 +65,12 @@ export const ANDROID_ICONS_OPTIONS = [
 
 export const DEFAULT_CREDITS_NUMBER =
   process.env.DEFAULT_CREDITS_NUMBER || '30';
+
+export const PRICE_TO_CREDITS_NUMBER = {
+  999: 210,
+  499: 90,
+  199: 30,
+  99: 10,
+};
+
+export const EVENT_ORDER_CREATED = 'order_created';
