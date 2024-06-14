@@ -20,7 +20,6 @@ export class BillingService {
   constructor() {
     this.configService = new ConfigService();
   }
-  async getPlane() {}
 
   async verifySignature(
     request: RawBodyRequest<Request>,
