@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Headers } from '@nestjs/common';
 import { ImageService } from '~/image/image.service';
 import { YupValidationPipe } from '~/pipes/yup-validation.pipe';
 import {
@@ -6,6 +6,7 @@ import {
   imageOptimizationSchema,
 } from '~/image/dto/optimaze-image.dto';
 import { ImageOptimizationResult } from '~/types';
+import { DecryptHeader } from '~/decorators/decryptHeader';
 
 @Controller('image')
 export class ImageController {
@@ -13,10 +14,13 @@ export class ImageController {
 
   @Post('optimize')
   async optimizeImage(
+    @DecryptHeader() figmaID: string,
     @Body(new YupValidationPipe(imageOptimizationSchema))
     image: ImageOptimizationDto[],
   ): Promise<{ jobId: string }> {
-    return await this.imageService.optimizeImage(image);
+    return await this.imageService.optimizeImage(image, {
+      figmaID,
+    });
   }
 
   @Get(':id/status')
@@ -28,11 +32,14 @@ export class ImageController {
   }
 
   @Get(':id/result')
-  async getImageOptimizationResult(@Param('id') id: string): Promise<{
+  async getImageOptimizationResult(
+    @DecryptHeader() figmaID: string,
+    @Param('id') id: string,
+  ): Promise<{
     status: number;
     reason?: string;
-    result?: ImageOptimizationResult;
+    result?: ImageOptimizationResult[];
   }> {
-    return await this.imageService.getImageOptimizationResult(id);
+    return await this.imageService.getImageOptimizationResult(id, figmaID);
   }
 }

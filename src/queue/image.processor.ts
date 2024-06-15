@@ -16,7 +16,7 @@ export class ImageQueueProcessor extends WorkerHost {
   async process(job: Job) {
     try {
       return await Promise.all(
-        job.data.map(
+        job.data.data.map(
           async ({
             name,
             uuid,
@@ -55,7 +55,10 @@ export class ImageQueueProcessor extends WorkerHost {
               response['pdfBuffer'] = encode(processedBuffer);
             }
 
-            return response;
+            return {
+              response,
+              metadata: job.data.metadata,
+            };
           },
         ),
       );
