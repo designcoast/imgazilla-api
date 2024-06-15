@@ -20,3 +20,6 @@ export const options = yup.object({
 export const imageOptimizationSchema = yup.array().of(options);
 
 export type ImageOptimizationDto = yup.InferType<typeof options>;
+export type ImageOptimizationMetadata = {
+  figmaID: string;
+};
