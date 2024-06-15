@@ -44,7 +44,7 @@ export class BillingService {
 
   async handleOrder(eventName: string, data: any, meta: any) {
     try {
-      this.logger.log(BillingService.name, `Order received from ${eventName}`);
+      this.logger.log(`Order received from ${eventName}`);
       if (eventName === EVENT_ORDER_CREATED) {
         const figmaUserID = meta?.custom_data?.figma_user_id;
         const account =
