@@ -8,16 +8,15 @@ import {
 import { ConfigService } from '@nestjs/config';
 
 import * as crypto from 'crypto';
-import { EVENT_ORDER_CREATED } from '~/constants';
+import { EVENT_ORDER_CREATED, PRICE_TO_CREDITS_NUMBER } from '~/constants';
 import { AccountService } from '~/account/account.service';
 
 @Injectable()
 export class BillingService {
   private readonly logger = new Logger(BillingService.name);
   private readonly configService: ConfigService;
-  private readonly accountService: AccountService;
 
-  constructor() {
+  constructor(private readonly accountService: AccountService) {
     this.configService = new ConfigService();
   }
 
@@ -45,12 +44,27 @@ export class BillingService {
 
   async handleOrder(eventName: string, data: any, meta: any) {
     try {
+      this.logger.log(BillingService.name, `Order received from ${eventName}`);
       if (eventName === EVENT_ORDER_CREATED) {
-        console.log('eventName', eventName);
-        console.log('data', data.attributes.total);
-        console.log('meta', meta);
-      }
+        const figmaUserID = meta?.custom_data?.figma_user_id;
+        const account =
+          await this.accountService.findAccountByFigmaUserId(figmaUserID);
 
+        if (!account) {
+          return HttpStatus.NOT_FOUND;
+        }
+
+        const numberOfCreditsByPrice =
+          PRICE_TO_CREDITS_NUMBER[data.attributes.total] || 0;
+
+        const currentCredits = parseInt(account.credits);
+        const credits = (currentCredits + numberOfCreditsByPrice).toString();
+
+        await this.accountService.updateAccountCredits({
+          figmaUserID,
+          credits,
+        });
+      }
       return HttpStatus.OK;
     } catch (e) {
       throw new HttpException('Webhook exception error:', e);
