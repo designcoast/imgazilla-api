@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccountEntity } from '~/account/entities/account.entity';
 import { Repository } from 'typeorm';
@@ -29,5 +29,20 @@ export class AccountService {
       credits: DEFAULT_CREDITS_NUMBER,
       photoUrl: input?.photoUrl,
     });
+  }
+
+  async updateAccountCredits(input: { figmaUserID: string; credits: string }) {
+    const account = await this.findAccountByFigmaUserId(input.figmaUserID);
+
+    if (!account) {
+      throw new HttpException('Account not found', HttpStatus.NOT_FOUND);
+    }
+
+    await this.accountRepository.update(
+      { figmaUserID: input.figmaUserID },
+      {
+        credits: input.credits,
+      },
+    );
   }
 }
