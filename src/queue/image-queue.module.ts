@@ -5,9 +5,11 @@ import { BullModule } from '@nestjs/bullmq';
 import { ImageQueueProcessor } from '~/queue/image.processor';
 import { ImageService } from '~/image/image.service';
 import { ImageQueueEvents } from '~/queue/image.queue-events';
+import { AccountModule } from '~/account/account.module';
 
 @Module({
   imports: [
+    AccountModule,
     BullModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -23,7 +25,12 @@ import { ImageQueueEvents } from '~/queue/image.queue-events';
       name: 'image-processing',
     }),
   ],
-  providers: [ImageQueueEvents, ImageQueueProcessor, ImageService],
+  providers: [
+    ImageQueueEvents,
+    ImageQueueProcessor,
+    ConfigService,
+    ImageService,
+  ],
   exports: [BullModule],
 })
 export class ImageQueueModule {}
