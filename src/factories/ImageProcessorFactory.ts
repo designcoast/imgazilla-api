@@ -34,30 +34,6 @@ export abstract class ImageProcessor {
   abstract process(): Promise<Buffer>;
 
   protected async optimizeImage(image: sharp.Sharp): Promise<sharp.Sharp> {
-    if (this.settings?.constraint) {
-      const metadata = await image.metadata();
-
-      switch (this.settings?.constraint.type) {
-        case 'SCALE':
-          if (this.settings?.constraint.value) {
-            image = image.resize({
-              width: this.settings?.constraint.value * metadata.width,
-              height: this.settings?.constraint.value * metadata.height,
-            });
-          }
-          break;
-        case 'WIDTH':
-        case 'HEIGHT':
-          if (this.settings?.constraint.value) {
-            image = image.resize({
-              width: this.settings?.constraint.value,
-              height: this.settings?.constraint.value,
-            });
-          }
-          break;
-      }
-    }
-
     if (this.settings?.colorProfile) {
       image = image.toColourspace(this.settings.colorProfile);
     }
