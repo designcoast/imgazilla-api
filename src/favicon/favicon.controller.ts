@@ -5,6 +5,7 @@ import {
 } from './dto/generate-favicon.dto';
 import { YupValidationPipe } from '~/pipes/yup-validation.pipe';
 import { FaviconService } from './favicon.service';
+import { DecryptHeader } from '~/decorators/decryptHeader';
 
 @Controller('favicon')
 export class FaviconController {
@@ -12,6 +13,7 @@ export class FaviconController {
 
   @Post('generate')
   async generateFavicon(
+    @DecryptHeader() figmaID: string,
     @Body(new YupValidationPipe(generateFaviconOptionsSchema))
     imageOptions: GenerateFaviconOptionsDto,
   ): Promise<
@@ -20,6 +22,10 @@ export class FaviconController {
       buffer: Uint8Array;
     }[]
   > {
+    await this.faviconService.checkCredits(figmaID);
+
+    await this.faviconService.updateCredits(figmaID);
+
     return await this.faviconService.generateFavicon(imageOptions);
   }
 }
