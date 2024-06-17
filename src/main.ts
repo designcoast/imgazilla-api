@@ -47,8 +47,8 @@ async function bootstrap() {
   app.useGlobalFilters(new ExceptionsFilter(signalLoggerService));
 
   // Configure express middleware for body size limits
-  app.useBodyParser('json', { limit: '10mb' }); // Start with a 10 MB limit
-  app.useBodyParser('urlencoded', { limit: '10mb', extended: true }); // Start with a 10 MB limit
+  app.useBodyParser('json', { limit: '10mb' });
+  app.useBodyParser('urlencoded', { limit: '10mb', extended: true });
   app.useBodyParser('raw', { type: '*/*' });
 
   app.useGlobalPipes(
