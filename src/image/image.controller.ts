@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Headers } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ImageService } from '~/image/image.service';
 import { YupValidationPipe } from '~/pipes/yup-validation.pipe';
 import {
@@ -7,10 +7,14 @@ import {
 } from '~/image/dto/optimaze-image.dto';
 import { ImageOptimizationResult } from '~/types';
 import { DecryptHeader } from '~/decorators/decryptHeader';
+import { AccountService } from '~/account/account.service';
 
 @Controller('image')
 export class ImageController {
-  constructor(private readonly imageService: ImageService) {}
+  constructor(
+    private readonly imageService: ImageService,
+    private readonly accountService: AccountService,
+  ) {}
 
   @Post('optimize')
   async optimizeImage(
@@ -18,6 +22,8 @@ export class ImageController {
     @Body(new YupValidationPipe(imageOptimizationSchema))
     image: ImageOptimizationDto[],
   ): Promise<{ jobId: string }> {
+    await this.accountService.checkAccountCredits(figmaID);
+
     return await this.imageService.optimizeImage(image, {
       figmaID,
     });
