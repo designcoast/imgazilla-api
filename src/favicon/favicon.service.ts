@@ -1,5 +1,5 @@
 import { extname } from 'path';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 import * as sharp from 'sharp';
 
@@ -16,6 +16,9 @@ import { getPlatformOptions } from '~/utils/platforms.utils';
 import { getIconOptions } from '~/configs/icon.config';
 import { stringToBoolean } from '~/utils/stringToBoolean.utils';
 import { decode } from 'base64-arraybuffer';
+import { AccountService } from '~/account/account.service';
+import { ConfigService } from '@nestjs/config';
+import { FAVICON_ENTITY_TYPE } from '~/constants';
 
 export interface ISourceSet {
   imgBuffer: Buffer;
@@ -24,6 +27,13 @@ export interface ISourceSet {
 
 @Injectable()
 export class FaviconService {
+  private readonly logger = new Logger(FaviconService.name);
+
+  constructor(
+    private readonly accountService: AccountService,
+    private configService: ConfigService,
+  ) {}
+
   async generateFavicon(
     imageOptions: GenerateFaviconOptionsDto,
   ): Promise<IFaviconImages[]> {
@@ -77,5 +87,38 @@ export class FaviconService {
       const buffer = await createPlane(source, props[0]).then(createPngImage);
       return { name: options.name, buffer };
     }
+  }
+
+  async updateCredits(figmaUserID: string): Promise<void> {
+    this.logger.log(`Update amount of credits for ${figmaUserID} account`);
+
+    const faviconCreditsCost = this.configService.get(
+      'FAVICON_ARCHIVE_CREDITS_COST',
+    );
+
+    const account =
+      await this.accountService.findAccountByFigmaUserId(figmaUserID);
+
+    if (!account) {
+      this.logger.log(`Account not found ${figmaUserID}`);
+    }
+
+    const currentCredits = parseInt(account.credits);
+    const imageCredits = parseInt(faviconCreditsCost);
+    const credits = (currentCredits - imageCredits).toString();
+
+    await this.accountService.updateAccountCredits({
+      figmaUserID,
+      credits,
+    });
+  }
+
+  async checkCredits(figmaUserID: string): Promise<void> {
+    this.logger.log(`Check credits for ${figmaUserID} account`);
+
+    await this.accountService.checkAccountCredits(
+      figmaUserID,
+      FAVICON_ENTITY_TYPE,
+    );
   }
 }
