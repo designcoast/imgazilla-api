@@ -6,10 +6,12 @@ import {
   HttpStatus,
   Body,
   HttpException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { AccountService } from '~/account/account.service';
 import { AccountEntity } from '~/account/entities/account.entity';
 import { CreateAccountDto } from '~/account/dto/CreateAccountDto';
+import { DecryptHeader } from '~/decorators/decryptHeader';
 
 @Controller('account')
 export class AccountController {
@@ -27,6 +29,7 @@ export class AccountController {
 
     return existedAccount;
   }
+
   @Post('createAccount')
   async createUserAccount(
     @Body() createAccountDto: CreateAccountDto,
@@ -48,5 +51,18 @@ export class AccountController {
     return {
       status: HttpStatus.CREATED,
     };
+  }
+
+  @Get('getAccountCredits')
+  async getAccountCredits(@DecryptHeader() figmaID: string): Promise<string> {
+    const accountEntity = await this.accountService.getAccountCredits({
+      figmaUserID: figmaID,
+    });
+
+    if (!accountEntity) {
+      throw new ForbiddenException('Forbidden');
+    }
+
+    return accountEntity.credits;
   }
 }
