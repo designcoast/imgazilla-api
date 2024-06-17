@@ -7,7 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccountEntity } from '~/account/entities/account.entity';
 import { Repository } from 'typeorm';
-import { DEFAULT_CREDITS_NUMBER } from '~/constants';
+import { DEFAULT_CREDITS_NUMBER, IMAGE_ENTITY_TYPE } from '~/constants';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -65,7 +65,7 @@ export class AccountService {
     );
   }
 
-  async checkAccountCredits(figmaID: string) {
+  async checkAccountCredits(figmaID: string, type: string = IMAGE_ENTITY_TYPE) {
     const accountEntity = await this.getAccountCredits({
       figmaUserID: figmaID,
     });
@@ -76,8 +76,16 @@ export class AccountService {
 
     const credits = parseInt(accountEntity.credits);
     const IMAGE_CREDITS_COST = this.configService.get('IMAGE_CREDITS_COST');
+    const FAVICON_ARCHIVE_CREDITS_COST = this.configService.get(
+      'FAVICON_ARCHIVE_CREDITS_COST',
+    );
 
-    if (credits < IMAGE_CREDITS_COST) {
+    const ENTITY_CREDITS_COST =
+      type === IMAGE_ENTITY_TYPE
+        ? IMAGE_CREDITS_COST
+        : FAVICON_ARCHIVE_CREDITS_COST;
+
+    if (credits < ENTITY_CREDITS_COST) {
       throw new HttpException(
         "It looks like you don't have enough credits to complete this operation.",
         HttpStatus.NOT_ACCEPTABLE,
