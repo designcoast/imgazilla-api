@@ -77,7 +77,7 @@ export class AccountService {
     const credits = parseInt(accountEntity.credits);
     const IMAGE_CREDITS_COST = this.configService.get('IMAGE_CREDITS_COST');
 
-    if (credits > IMAGE_CREDITS_COST) {
+    if (credits < IMAGE_CREDITS_COST) {
       throw new HttpException(
         "It looks like you don't have enough credits to complete this operation.",
         HttpStatus.NOT_ACCEPTABLE,
