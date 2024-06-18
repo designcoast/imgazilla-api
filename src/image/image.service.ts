@@ -69,7 +69,7 @@ export class ImageService {
           reason: 'Image optimization job not found',
         };
       }
-
+      //TODO: Fix it
       const { response, metadata } = job.returnvalue[0];
 
       if (metadata?.figmaID !== figmaAccountID) {
