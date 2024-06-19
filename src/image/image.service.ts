@@ -7,6 +7,7 @@ import {
   ImageOptimizationDto,
   ImageOptimizationMetadata,
 } from '~/image/dto/optimaze-image.dto';
+import { ImageOptimizationResult } from '~/types';
 
 @Injectable()
 export class ImageService {
@@ -69,14 +70,17 @@ export class ImageService {
           reason: 'Image optimization job not found',
         };
       }
-      //TODO: Fix it
-      const { response, metadata } = job.returnvalue[0];
+      const { metadata } = job.returnvalue[0];
+
+      const result = job.returnvalue.map(
+        (item: { response: ImageOptimizationResult }) => item.response,
+      );
 
       if (metadata?.figmaID !== figmaAccountID) {
         return { status: HttpStatus.NOT_FOUND, result: [] };
       }
 
-      return { status: HttpStatus.OK, result: [response] };
+      return { status: HttpStatus.OK, result };
     } catch (e) {}
   }
 }
