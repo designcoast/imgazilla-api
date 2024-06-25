@@ -81,26 +81,26 @@ export class SVGProcessor extends ImageProcessor {
 
 export class PDFProcessor extends ImageProcessor {
   async process(): Promise<Buffer> {
-    const optimizedImageBuffer = await sharp(this.buffer).png().toBuffer();
-    const doc = new PDFDocument();
-    const buffers: Buffer[] = [];
+    // const optimizedImageBuffer = await sharp(this.buffer).png().toBuffer();
+    // const doc = new PDFDocument();
+    // const buffers: Buffer[] = [];
+    //
+    // doc.on('data', (chunk) => {
+    //   buffers.push(chunk);
+    // });
+    //
+    // await new Promise<void>((resolve) => {
+    //   doc.on('end', () => {
+    //     resolve();
+    //   });
+    //
+    //   doc.image(optimizedImageBuffer, 0, 0, {
+    //     fit: [doc.page.width, doc.page.height],
+    //   });
+    //   doc.end();
+    // });
 
-    doc.on('data', (chunk) => {
-      buffers.push(chunk);
-    });
-
-    await new Promise<void>((resolve) => {
-      doc.on('end', () => {
-        resolve();
-      });
-
-      doc.image(optimizedImageBuffer, 0, 0, {
-        fit: [doc.page.width, doc.page.height],
-      });
-      doc.end();
-    });
-
-    return Buffer.concat(buffers);
+    return this.buffer;
   }
 }
 
