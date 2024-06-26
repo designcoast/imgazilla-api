@@ -80,6 +80,8 @@ export class ImageService {
         return { status: HttpStatus.NOT_FOUND, result: [] };
       }
 
+      await this.processingQueue.remove(id);
+
       return { status: HttpStatus.OK, result };
     } catch (e) {}
   }
