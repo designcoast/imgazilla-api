@@ -10,7 +10,7 @@ COPY package*.json yarn.lock ./
 # Install dependencies using yarn
 RUN yarn install --ignore-engines --production
 
-CMD: ['yarn', 'i', '-g', '@nestjs/cli']
+CMD ["yarn", "i", "-g", "@nestjs/cli"]
 
 # Copy the rest of your application code
 COPY . .
