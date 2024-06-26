@@ -10,13 +10,13 @@ COPY package*.json yarn.lock ./
 # Install dependencies using yarn
 RUN yarn install --ignore-engines --production
 
-CMD ["yarn", "i", "-g", "@nestjs/cli"]
+CMD ["npm", "i", "-g", "@nestjs/cli"]
 
 # Copy the rest of your application code
 COPY . .
 
 # Build your NestJS application (assuming it compiles TypeScript to JavaScript)
-RUN yarn build
+RUN npm run build
 
 # Expose the port your application runs on
 EXPOSE 3000
