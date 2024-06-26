@@ -7,7 +7,7 @@ WORKDIR /app
 # Copy package.json and yarn.lock to the working directory
 COPY package*.json yarn.lock ./
 
-RUN yarn i -g @nestjs/cli
+RUN npm i -g @nestjs/cli
 
 # Install dependencies using yarn
 RUN yarn install --ignore-engines --production
