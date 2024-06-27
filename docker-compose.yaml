@@ -1,19 +1,26 @@
 version: '3.8'
 
 services:
-  nestjs-app:
+  imgazilla-app:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
     depends_on:
-      - redis
-      - postgres
+      - imgazilla-redis
+      - imgazilla-postgres
     networks:
-      - nestjs-net
+      - traefik-proxy
+      - imgazilla-net
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.api.rule=PathPrefix(`/api`)
+      - traefik.http.routers.api.entrypoints=https
+      - traefik.http.services.imgazilla-app.loadbalancer.server.port=3000
+      - traefik.http.routers.api.service=imgazilla-app
 
-  redis:
+  imgazilla-redis:
     image: redis:latest
     restart: always
     container_name: imgazilla-redis
@@ -22,10 +29,12 @@ services:
       - '6379:6379'
     volumes:
       - redis_data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
     networks:
-      - nestjs-net
+      - imgazilla-net
 
-  postgres:
+  imgazilla-postgres:
     image: postgres:latest
     container_name: imgazilla-postgres
     environment:
@@ -36,11 +45,18 @@ services:
       - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DATABASE_NAME} -U $${POSTGRES_DATABASE_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
-      - nestjs-net
+      - imgazilla-net
 
 networks:
-  nestjs-net:
+  imgazilla-net:
+  traefik-proxy:
+    external: true
 
 volumes:
   postgres_data:
