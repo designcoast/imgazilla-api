@@ -14,7 +14,10 @@ services:
       - imgazilla-net
     labels:
       - traefik.enable=true
+      - traefik.docker.network=vs0ooog
+      - traefik.constraint-label=vs0ooog
       - traefik.http.routers.api.rule=PathPrefix(`/api`)
+      - traefik.http.routers.api.entrypoints=https
       - traefik.http.services.imgazilla-app.loadbalancer.server.port=3000
       - traefik.http.routers.api.service=imgazilla-app
 
