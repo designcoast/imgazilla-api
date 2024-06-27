@@ -16,15 +16,14 @@ services:
       - traefik.enable=true
       - traefik.docker.network=vs0ooog
       - traefik.constraint-label=vs0ooog
-      - traefik.http.routers.imgazilla-app.rule=Host(`figma.imgazilla.app`)
-      - traefik.http.routers.imgazilla-app.middlewares=header-check
+      - traefik.http.routers.imgazilla-app.rule=Host(`figma.imgazilla.app`) && HeaderRegexp(`x-Figma-Signature`, `^.+$`)
+#      - traefik.http.routers.imgazilla-app.middlewares=header-check
       - traefik.http.services.imgazilla-app.loadbalancer.server.port=3000
 
 #      - traefik.http.routers.api.service=imgazilla-app
 
-      - traefik.http.middlewares.header-check.headers.customrequestheaders.x-Figma-Signature
-      - traefik.http.middlewares.header-check.headers.allowedHostRegexp=^.+$
-      - traefik.http.middlewares.header-check.headers.schemes=https,http
+#      - traefik.http.middlewares.header-check.headers.customrequestheaders.x-Figma-Signature
+#      - traefik.http.middlewares.header-check.headers.HostRegexp=^.+$
 
 
 #      - traefik.http.routers.block.rule=Host(`figma.imgazilla.app`) && PathPrefix(`/`)
