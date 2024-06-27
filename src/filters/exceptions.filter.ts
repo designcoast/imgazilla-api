@@ -60,7 +60,7 @@ export class ExceptionsFilter implements ExceptionFilter {
 
     this.logger.error(errorMessage);
 
-    if (!Boolean(isEnabledNotifications)) {
+    if (isEnabledNotifications === 'true') {
       await this.signalLoggerService.error(errorMessage);
     }
 

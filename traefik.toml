@@ -1,3 +1,0 @@
-defaultEntryPoints = ["https"]
-[docker]
-network = "vs0ooog"
