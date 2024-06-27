@@ -16,10 +16,15 @@ services:
       - traefik.enable=true
       - traefik.docker.network=vs0ooog
       - traefik.constraint-label=vs0ooog
-      - traefik.http.routers.api.rule=PathPrefix(`/api`)
+      - traefik.http.routers.api.rule=Host(`figma.imgazilla.app`) && PathPrefix(`/api`)
+      - traefik.http.routers.api.service=imgazilla-app
+      - traefik.http.routers.api.priority=2
+      - traefik.http.routers.block.rule=Host(`figma.imgazilla.app`) && PathPrefix(`/`)
+      - traefik.http.routers.block.service=noop-service
+      - traefik.http.routers.block.priority=1
+      - traefik.http.services.noop-service.loadbalancer.server.url=http://localhost:65535
       - traefik.http.routers.api.entrypoints=https
       - traefik.http.services.imgazilla-app.loadbalancer.server.port=3000
-      - traefik.http.routers.api.service=imgazilla-app
 
   imgazilla-redis:
     image: redis:latest
