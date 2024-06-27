@@ -1,3 +1,3 @@
 defaultEntryPoints = ["https"]
-[providers.docker]
-network = "traefik-proxy"
+[docker]
+network = "vs0ooog"
