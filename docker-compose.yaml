@@ -18,6 +18,7 @@ services:
       - "traefik.constraint-label=vs0ooog"
       - "traefik.http.routers.imgazilla-app.entryPoints=https"
       - "traefik.http.routers.imgazilla-app.rule=(Host(`figma.imgazilla.app`) && PathPrefix(`/api`))"
+      - "traefik.http.routers.imgazilla-app.priority=2"
       - "traefik.http.routers.imgazilla-app.middlewares=secured"
       - "traefik.http.middlewares.secured.chain.middlewares=route-prefix,cors-rule,test-ratelimit"
 
@@ -28,7 +29,7 @@ services:
 
       - "traefik.http.services.imgazilla-app.loadbalancer.server.port=3000"
       -
-      - "traefik.http.routers.block.rule=Host(`figma.imgazilla.app`) && PathPrefix(`/`)"
+      - "traefik.http.routers.block.rule=(Host(`figma.imgazilla.app`) && PathPrefix(`/`))"
       - "traefik.http.routers.block.service=noop-service"
       - "traefik.http.routers.block.priority=1"
       - "traefik.http.routers.block.middlewares=allow-localhost"
