@@ -16,8 +16,7 @@ services:
       - traefik.enable=true
       - traefik.docker.network=vs0ooog
       - traefik.constraint-label=vs0ooog
-      - traefik.http.routers.imgazilla-app.rule=Host(`figma.imgazilla.app`) && HeaderRegexp(`x-figma-signature`, `^.+$`)
-      - traefik.http.routers.imgazilla-app.service=imgazilla-api
+      - traefik.http.routers.imgazilla-app.rule=Host(`figma.imgazilla.app`)
       - traefik.http.routers.imgazilla-app.middlewares=secured
       - traefik.http.middlewares.secured.chain.middlewares=route-prefix,cors-rule,test-ratelimit
 
@@ -26,7 +25,7 @@ services:
       - traefik.http.middlewares.test-ratelimit.ratelimit.average=10
       - traefik.http.middlewares.test-ratelimit.ratelimit.burst=20
 
-      - traefik.http.services.imgazilla-api.loadbalancer.server.port=3000
+      - traefik.http.services.imgazilla-app.loadbalancer.server.port=3000
 
 
   imgazilla-redis:
