@@ -16,21 +16,17 @@ services:
       - traefik.enable=true
       - traefik.docker.network=vs0ooog
       - traefik.constraint-label=vs0ooog
-      - traefik.http.routers.imgazilla-app.rule=Host(`figma.imgazilla.app`) && HeaderRegexp(`x-Figma-Signature`, `^.+$`)
-#      - traefik.http.routers.imgazilla-app.middlewares=header-check
-      - traefik.http.services.imgazilla-app.loadbalancer.server.port=3000
+      - traefik.http.routers.imgazilla-app.rule=Host(`figma.imgazilla.app`) && HeaderRegexp(`x-figma-signature`, `^.+$`)
+      - traefik.http.routers.imgazilla-app.service=imgazilla-api
+      - traefik.http.routers.imgazilla-app.middlewares=secured
+      - traefik.http.middlewares.secured.chain.middlewares=route-prefix,cors-rule,test-ratelimit
 
-#      - traefik.http.routers.api.service=imgazilla-app
+      - traefik.http.middlewares.route-prefix.addprefix.prefix=/api
+      - traefik.http.middlewares.cors-rule.headers.accesscontrolallowmethods=GET,OPTIONS,POST
+      - traefik.http.middlewares.test-ratelimit.ratelimit.average=10
+      - traefik.http.middlewares.test-ratelimit.ratelimit.burst=20
 
-#      - traefik.http.middlewares.header-check.headers.customrequestheaders.x-Figma-Signature
-#      - traefik.http.middlewares.header-check.headers.HostRegexp=^.+$
-
-
-#      - traefik.http.routers.block.rule=Host(`figma.imgazilla.app`) && PathPrefix(`/`)
-#      - traefik.http.routers.block.service=noop-service
-#      - traefik.http.routers.block.priority=1
-#      - traefik.http.services.noop-service.loadbalancer.server.url=http://localhost:65535
-#      - traefik.http.routers.api.entrypoints=https
+      - traefik.http.services.imgazilla-api.loadbalancer.server.port=3000
 
 
   imgazilla-redis:
