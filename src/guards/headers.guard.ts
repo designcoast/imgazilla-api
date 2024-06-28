@@ -30,7 +30,7 @@ export class HeadersGuard implements CanActivate {
       return true;
     }
 
-    if (request.headers['user-agent'].includes('Figma') && figmaHeader) {
+    if (request.headers['user-agent'].includes('Figma') || figmaHeader) {
       return true;
     }
 
