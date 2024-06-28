@@ -18,26 +18,9 @@ services:
       - "traefik.constraint-label=vs0ooog"
       - "traefik.http.routers.imgazilla-app.entryPoints=https"
       - "traefik.http.routers.imgazilla-app.rule=(Host(`figma.imgazilla.app`) && PathPrefix(`/api`))"
-
-#      - "traefik.http.routers.imgazilla-app.middlewares=secured"
-#      - "traefik.http.routers.secured.chain.middlewares=route-prefix,cors-rule,test-ratelimit"
-
       - "traefik.http.middlewares.route-prefix.addprefix.prefix=/api"
       - "traefik.http.routers.imgazilla-app.middlewares=route-prefix@docker"
-
-#      - "traefik.http.middlewares.cors-rule.headers.accesscontrolallowmethods=GET,OPTIONS,POST"
-#      - "traefik.http.middlewares.test-ratelimit.ratelimit.average=10"
-#      - "traefik.http.middlewares.test-ratelimit.ratelimit.burst=20"
-
       - "traefik.http.services.imgazilla-app.loadbalancer.server.port=3000"
-
-#      - "traefik.http.routers.block.rule=(Host(`figma.imgazilla.app`) && PathPrefix(`/`))"
-#      - "traefik.http.routers.block.service=noop-service"
-#      - "traefik.http.routers.block.priority=1"
-#      - "traefik.http.routers.block.middlewares=allow-localhost"
-#      - "traefik.http.middlewares.allow-localhost.ipwhitelist.sourcerange=127.0.0.1/32"
-#      - "traefik.http.services.noop-service.loadbalancer.server.url=http://localhost:65535"
-
 
   imgazilla-redis:
     image: redis:latest
