@@ -26,6 +26,7 @@ import { SignalLoggerService } from '~/loggers/signal-logger.service';
 import { ImageQueueModule } from '~/queue/image-queue.module';
 import { BillingModule } from './billing/billing.module';
 import { HeadersGuard } from '~/guards/headers.guard';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -38,6 +39,12 @@ import { HeadersGuard } from '~/guards/headers.guard';
     TelegramModule,
     ImageQueueModule,
     BillingModule,
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 20,
+      },
+    ]),
   ],
   controllers: [AppController, FaviconController],
   providers: [
