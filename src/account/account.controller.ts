@@ -7,6 +7,7 @@ import {
   Body,
   HttpException,
   ForbiddenException,
+  Logger,
 } from '@nestjs/common';
 import { AccountService } from '~/account/account.service';
 import { AccountEntity } from '~/account/entities/account.entity';
@@ -15,6 +16,8 @@ import { DecryptHeader } from '~/decorators/decryptHeader';
 
 @Controller('account')
 export class AccountController {
+  private readonly logger = new Logger(AccountController.name);
+
   constructor(private readonly accountService: AccountService) {}
   @Get('getAccount')
   async getAccount(
@@ -48,6 +51,10 @@ export class AccountController {
       photoUrl,
     });
 
+    this.logger.log(
+      `Account is created successfully with name ${name} and id ${id}`,
+    );
+
     return {
       status: HttpStatus.CREATED,
     };
@@ -60,6 +67,8 @@ export class AccountController {
     });
 
     if (!accountEntity) {
+      this.logger.error(`Account ${figmaID} does not exist`);
+
       throw new ForbiddenException('Forbidden');
     }
 
