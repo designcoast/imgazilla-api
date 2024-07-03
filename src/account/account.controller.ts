@@ -22,12 +22,13 @@ export class AccountController {
   @Get('getAccount')
   async getAccount(
     @Query('id') id: string,
-  ): Promise<HttpStatus.NOT_FOUND | AccountEntity> {
+  ): Promise<NonNullable<unknown> | AccountEntity> {
     const existedAccount =
       await this.accountService.findAccountByFigmaUserId(id);
 
     if (!existedAccount) {
-      throw new HttpException('Account not found', HttpStatus.NOT_FOUND);
+      this.logger.error(`Account with id: ${id} not found`);
+      return {};
     }
 
     return existedAccount;
@@ -36,7 +37,7 @@ export class AccountController {
   @Post('createAccount')
   async createUserAccount(
     @Body() createAccountDto: CreateAccountDto,
-  ): Promise<{ status: HttpStatus }> {
+  ): Promise<AccountEntity> {
     const { id, name, photoUrl } = createAccountDto;
     const existedAccount =
       await this.accountService.findAccountByFigmaUserId(id);
@@ -45,19 +46,17 @@ export class AccountController {
       throw new HttpException('Account exists', HttpStatus.CONFLICT);
     }
 
+    this.logger.log(
+      `Account is created successfully with name ${name} and id ${id}`,
+    );
+
     await this.accountService.createAccount({
       name,
       figmaUserID: id,
       photoUrl,
     });
 
-    this.logger.log(
-      `Account is created successfully with name ${name} and id ${id}`,
-    );
-
-    return {
-      status: HttpStatus.CREATED,
-    };
+    return await this.accountService.findAccountByFigmaUserId(id);
   }
 
   @Get('getAccountCredits')

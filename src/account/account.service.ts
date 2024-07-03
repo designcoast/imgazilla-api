@@ -54,7 +54,10 @@ export class AccountService {
     const account = await this.findAccountByFigmaUserId(input.figmaUserID);
 
     if (!account) {
-      throw new HttpException('Account not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        `Account ${input.figmaUserID} not found`,
+        HttpStatus.NOT_FOUND,
+      );
     }
 
     await this.accountRepository.update(
