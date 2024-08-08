@@ -1,5 +1,8 @@
 import { IMAGE_OPTIMISATION_FORMATS } from '~/constants';
-import { encode } from 'base64-arraybuffer';
+
+export interface IIconConfig {
+  backgroundColor: string;
+}
 
 export interface IIconOptions {
   name: string;

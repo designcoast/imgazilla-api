@@ -77,3 +77,8 @@ export const EVENT_ORDER_CREATED = 'order_created';
 
 export const IMAGE_ENTITY_TYPE = 'IMAGE';
 export const FAVICON_ENTITY_TYPE = 'FAVICON';
+
+export const DEFAULT_OPTIONS = {
+  background: '#fff',
+  theme_color: '#fff',
+};

@@ -11,7 +11,7 @@ import {
   createRawImage,
   createSvgImage,
 } from '~/utils/icons.utils';
-import { IFaviconImages, IIconOptions } from '~/types';
+import { IFaviconImages, IIconConfig, IIconOptions } from '~/types';
 import { getPlatformOptions } from '~/utils/platforms.utils';
 import { getIconOptions } from '~/configs/icon.config';
 import { stringToBoolean } from '~/utils/stringToBoolean.utils';
@@ -39,6 +39,11 @@ export class FaviconService {
   ): Promise<IFaviconImages[]> {
     const { image, platforms } = imageOptions;
 
+    //TODO: I guess we can extend config for each platform
+    const iconConfig = {
+      backgroundColor: imageOptions.bgColor,
+    } satisfies IIconConfig;
+
     const imageBuffer = Buffer.from(decode(image));
 
     const source = {
@@ -57,7 +62,7 @@ export class FaviconService {
 
       const result = await Promise.all(
         platformOptions.map((iconOptions: IIconOptions) =>
-          this.createImages(source, iconOptions),
+          this.createImages(source, iconOptions, iconConfig),
         ),
       );
 
@@ -66,12 +71,19 @@ export class FaviconService {
 
     return responses;
   }
+  // bgColor
 
   private async createImages(
     source: ISourceSet,
     options: IIconOptions,
+    iconConfig: IIconConfig,
   ): Promise<IFaviconImages> {
-    const props = getIconOptions(options);
+    const updatedOptions = {
+      ...options,
+      ...iconConfig,
+    };
+
+    const props = getIconOptions(updatedOptions);
     const ext = extname(options.name);
 
     if (ext === '.ico') {

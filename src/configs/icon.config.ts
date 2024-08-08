@@ -1,4 +1,4 @@
-import { IIconOptions } from '~/types';
+import { IIconConfig, IIconOptions } from '~/types';
 
 export function getIconProperty(width: number, height?: number) {
   return {
@@ -20,11 +20,12 @@ export function getIconProperties(...sizes: number[]) {
   };
 }
 
-export const getIconOptions = (options: IIconOptions) =>
+export const getIconOptions = (options: IIconOptions & IIconConfig) =>
   options.sizes.map((size) => ({
     ...size,
     offset: options.offset ?? 0,
-    background: undefined, //TODO: Add options for creating bg
+    background:
+      options.backgroundColor !== '' ? options.backgroundColor : undefined,
     transparent: options.transparent,
     rotate: options.rotate,
   }));
