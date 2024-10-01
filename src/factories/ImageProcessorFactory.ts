@@ -1,6 +1,4 @@
 import * as sharp from 'sharp';
-import * as PDFDocument from 'pdfkit';
-import { optimize as optimizeSvg } from 'svgo';
 import { IMAGE_OPTIMISATION_FORMATS } from '~/constants';
 
 interface ConstraintSettings {
@@ -59,23 +57,77 @@ export class JPGProcessor extends ImageProcessor {
   }
 }
 
+// export class SVGProcessor extends ImageProcessor {
+//   async process(): Promise<Buffer> {
+//     const optimizedSvg = optimizeSvg(this.buffer.toString('utf-8'), {
+//       multipass: true,
+//       floatPrecision: 2,
+//       plugins: [
+//         {
+//           name: 'preset-default',
+//           params: {
+//             overrides: {
+//               removeViewBox: false,
+//             },
+//           },
+//         },
+//       ],
+//     });
+//     return Buffer.from(optimizedSvg.data, 'utf-8');
+//   }
+// }
+
 export class SVGProcessor extends ImageProcessor {
   async process(): Promise<Buffer> {
-    const optimizedSvg = optimizeSvg(this.buffer.toString('utf-8'), {
-      multipass: true,
-      floatPrecision: 2,
-      plugins: [
-        {
-          name: 'preset-default',
-          params: {
-            overrides: {
-              removeViewBox: false,
-            },
-          },
-        },
-      ],
+    try {
+      // Optimize the PNG image
+      const optimizedBuffer = await sharp(this.buffer)
+        .png({ quality: this.optimizationPercent })
+        .toBuffer();
+
+      // Get image metadata
+      const image = sharp(optimizedBuffer);
+      const metadata = await image.metadata();
+
+      const width = metadata.width;
+      const height = metadata.height;
+
+      // Base64 encode the optimized PNG
+      const base64Data = optimizedBuffer.toString('base64');
+
+      // Create the SVG content
+      const svgContent = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
+          <image href="data:image/png;base64,${base64Data}" width="${width}" height="${height}" />
+        </svg>
+      `;
+
+      return Buffer.from(svgContent, 'utf-8');
+    } catch (error) {
+      throw new Error(`SVG processing failed: ${error.message}`);
+    }
+  }
+}
+
+export class WebPProcessor extends ImageProcessor {
+  async process(): Promise<Buffer> {
+    let image = sharp(this.buffer).webp({
+      quality: this.optimizationPercent,
+      lossless: true,
     });
-    return Buffer.from(optimizedSvg.data, 'utf-8');
+    image = await this.optimizeImage(image);
+    return image.toBuffer();
+  }
+}
+
+export class AVIFProcessor extends ImageProcessor {
+  async process(): Promise<Buffer> {
+    let image = sharp(this.buffer).avif({
+      quality: this.optimizationPercent,
+      lossless: true,
+    });
+    image = await this.optimizeImage(image);
+    return image.toBuffer();
   }
 }
 
@@ -119,6 +171,10 @@ export class ImageProcessorFactory {
         return new JPGProcessor(buffer, format, optimizationPercent, settings);
       case IMAGE_OPTIMISATION_FORMATS.SVG:
         return new SVGProcessor(buffer, format, optimizationPercent, settings);
+      case IMAGE_OPTIMISATION_FORMATS.WebP:
+        return new WebPProcessor(buffer, format, optimizationPercent, settings);
+      case IMAGE_OPTIMISATION_FORMATS.AVIF:
+        return new AVIFProcessor(buffer, format, optimizationPercent, settings);
       case IMAGE_OPTIMISATION_FORMATS.PDF:
         return new PDFProcessor(buffer, format, optimizationPercent, settings);
       default:

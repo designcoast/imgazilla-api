@@ -26,6 +26,7 @@ export const IMAGE_OPTIMISATION_FORMATS = {
   SVG: 'svg',
   WebP: 'webp',
   PDF: 'pdf',
+  AVIF: 'avif',
 } as const;
 
 export const ICONS_OPTIONS = [

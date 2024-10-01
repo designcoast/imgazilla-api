@@ -83,6 +83,8 @@ export class ImageService {
       await this.processingQueue.remove(id);
 
       return { status: HttpStatus.OK, result };
-    } catch (e) {}
+    } catch (e) {
+      this.logger.error(e);
+    }
   }
 }
