@@ -27,9 +27,12 @@ import { ImageQueueModule } from '~/queue/image-queue.module';
 import { BillingModule } from './billing/billing.module';
 import { HeadersGuard } from '~/guards/headers.guard';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { ScheduleModule } from '@nestjs/schedule';
+import { BackupModule } from '~/backup/backup.module';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     ConfigModule.forRoot(),
     DatabaseModule,
     ArchiveModule,
@@ -45,6 +48,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
         limit: 20,
       },
     ]),
+    BackupModule,
   ],
   controllers: [AppController, FaviconController],
   providers: [
