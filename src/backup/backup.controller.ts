@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { BackupService } from '~/backup/backup.service';
-import { Readable } from 'stream';
 
 @Controller('backup')
 export class BackupController {
@@ -16,16 +15,9 @@ export class BackupController {
   @Post('create')
   async createBackup(@Res() res: Response) {
     try {
-      const backupStream = await this.backupService.performBackup();
+      await this.backupService.createBackup();
 
-      res.set({
-        'Content-Type': 'application/zip',
-        'Content-Disposition': `attachment; filename="backup_${new Date()
-          .toISOString()
-          .replace(/[:.]/g, '-')}.zip"`,
-      });
-
-      (backupStream as Readable).pipe(res);
+      return res.json().status(200);
     } catch (error) {
       throw new HttpException(
         'Backup creation failed',

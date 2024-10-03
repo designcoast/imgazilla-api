@@ -43,6 +43,8 @@ export class BackupService {
 
       process.env.PGPASSWORD = process.env.POSTGRES_DATABASE_PASSWORD;
 
+      //This line is used for testing only for the macos environment
+      // const pgDump = spawn('/opt/homebrew/opt/libpq/bin/pg_dump', args);
       const pgDump = spawn('pg_dump', args);
 
       pgDump.on('error', (error) => {
