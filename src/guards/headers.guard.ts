@@ -22,6 +22,9 @@ export class HeadersGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const figmaHeader = request.headers['x-figma-signature'];
     const signatureHeader = request.headers['x-signature'];
+    // if (request.route.path.includes('backup')) {
+    //   return true;
+    // }
 
     if (
       request.headers['user-agent'] === 'LemonSqueezy-Hookshot' &&
