@@ -1,6 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { Bot } from 'grammy';
+import { Bot, InputFile } from 'grammy';
 import { ConfigService } from '@nestjs/config';
+import { Readable } from 'stream';
 
 @Injectable()
 export class SignalAlertService {
@@ -19,6 +20,23 @@ export class SignalAlertService {
       this.logger.log('Alert sent to Telegram successfully.');
     } catch (error) {
       this.logger.error('Failed to send alert to Telegram', error);
+    }
+  }
+
+  async sendDocument(backupStream: Readable) {
+    const chatId = `-${this.configService.get('TELEGRAM_BACKUP_CHAT_ID')}`;
+
+    const fileName = `backup_${new Date().toISOString().replace(/[:.]/g, '-')}.zip`;
+
+    const inputFile = new InputFile(backupStream, fileName);
+
+    try {
+      await this.bot.api.sendDocument(chatId, inputFile, {
+        caption: `Database backup created on ${new Date().toLocaleString()}`,
+      });
+      this.logger.log('Document sent to Telegram successfully.');
+    } catch (error) {
+      this.logger.error('Failed to send Document to Telegram', error);
     }
   }
 }
