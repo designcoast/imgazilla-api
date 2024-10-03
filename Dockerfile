@@ -1,6 +1,8 @@
 # Use the official Node.js 21 image as base
 FROM node:21.1.0-alpine
 
+RUN apt-get update && apt-get install -y postgresql-client
+
 # Set the working directory inside the container
 WORKDIR /app
 
