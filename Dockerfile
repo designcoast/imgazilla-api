@@ -1,7 +1,7 @@
-# Use the official Node.js 21 image as base
-FROM node:21.1.0-alpine
+# Use the official Node.js 22 image as base
+FROM node:22.9-alpine
 
-RUN apk add && apk add postgresql-client
+RUN apk add postgresql && apk add postgresql-client && apk upgrade
 
 # Set the working directory inside the container
 WORKDIR /app
