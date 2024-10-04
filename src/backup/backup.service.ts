@@ -25,7 +25,6 @@ export class BackupService {
       await this.signalAlertService.sendDocument(backupStream);
     } catch (error) {
       this.logger.error('Backup and send failed', error.stack);
-      // Optionally notify via Telegram
     }
   }
 
