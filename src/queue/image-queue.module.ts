@@ -6,6 +6,9 @@ import { ImageQueueProcessor } from '~/queue/image.processor';
 import { ImageService } from '~/image/image.service';
 import { ImageQueueEvents } from '~/queue/image.queue-events';
 import { AccountModule } from '~/account/account.module';
+import { BackgroundRemovalEventsQueue } from '~/queue/background-removal-events.queue';
+import { BackgroundRemovalQueueProcessor } from '~/queue/background-removal.processor';
+import { BackgroundRemovalService } from '~/backgroundRemoval/backgroundRemoval.service';
 
 @Module({
   imports: [
@@ -24,11 +27,17 @@ import { AccountModule } from '~/account/account.module';
     BullModule.registerQueue({
       name: 'image-processing',
     }),
+    BullModule.registerQueue({
+      name: 'background-removal',
+    }),
   ],
   providers: [
     ImageQueueEvents,
+    BackgroundRemovalEventsQueue,
     ImageQueueProcessor,
+    BackgroundRemovalQueueProcessor,
     ConfigService,
+    BackgroundRemovalService,
     ImageService,
   ],
   exports: [BullModule],
