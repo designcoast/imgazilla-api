@@ -2,6 +2,9 @@ import { Module } from '@nestjs/common';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 
+import { ThrottlerModule } from '@nestjs/throttler';
+import { ScheduleModule } from '@nestjs/schedule';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -26,9 +29,8 @@ import { SignalLoggerService } from '~/loggers/signal-logger.service';
 import { ImageQueueModule } from '~/queue/image-queue.module';
 import { BillingModule } from './billing/billing.module';
 import { HeadersGuard } from '~/guards/headers.guard';
-import { ThrottlerModule } from '@nestjs/throttler';
-import { ScheduleModule } from '@nestjs/schedule';
 import { BackupModule } from '~/backup/backup.module';
+import { BackgroundRemovalModule } from '~/backgroundRemoval/backgroundRemoval.module';
 
 @Module({
   imports: [
@@ -38,6 +40,7 @@ import { BackupModule } from '~/backup/backup.module';
     ArchiveModule,
     AccountModule,
     ImageModule,
+    BackgroundRemovalModule,
     SignalAlertModule,
     TelegramModule,
     ImageQueueModule,
