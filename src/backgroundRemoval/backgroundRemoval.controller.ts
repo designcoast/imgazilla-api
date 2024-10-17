@@ -7,7 +7,6 @@ import {
   BackgroundRemovalDto,
   backgroundRemovalSchema,
 } from '~/backgroundRemoval/dto/remove-background.dto';
-import { ImageOptimizationResult } from '~/types';
 
 @Controller('background-removal')
 export class BackgroundRemovalController {
@@ -46,7 +45,7 @@ export class BackgroundRemovalController {
   ): Promise<{
     status: number;
     reason?: string;
-    result?: Buffer | null;
+    result?: string | null;
   }> {
     return await this.backgroundRemovalService.getBackgroundRemovalResult(
       id,
