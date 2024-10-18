@@ -3,5 +3,5 @@ export const gradioClient = async (): Promise<any> => {
 
   const { Client } = await importDynamic('@gradio/client');
 
-  return await Client.connect('http://localhost:7000/');
+  return await Client.connect(`http://${process.env.BG_REMOVAL_HOST}:7000/`);
 };
