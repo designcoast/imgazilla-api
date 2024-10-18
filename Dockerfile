@@ -3,6 +3,9 @@ FROM node:22.9-alpine
 
 RUN apk add postgresql && apk add postgresql-client && apk upgrade
 
+RUN apk add --update python3 make g++\
+   && rm -rf /var/cache/apk/*
+
 # Set the working directory inside the container
 WORKDIR /app
 
