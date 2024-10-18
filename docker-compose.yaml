@@ -58,10 +58,13 @@ services:
 
   rembg-service:
     image: danielgatis/rembg:latest
+    container_name: rembg-service
     command: s --host 0.0.0.0 --port 7000 --log_level info
     ports:
       - '7000:7000'
     restart: unless-stopped
+    networks:
+      - imgazilla-net
 
 networks:
   imgazilla-net:
