@@ -27,7 +27,6 @@
   "dependencies": {
     "@gradio/client": "^1.6.0-beta.3",
     "@grammyjs/nestjs": "^0.3.4",
-    "@imgly/background-removal-node": "^1.4.5",
     "@lemonsqueezy/lemonsqueezy.js": "^3.3.1",
     "@nestjs/bull": "^10.2.1",
     "@nestjs/bullmq": "^10.2.1",
