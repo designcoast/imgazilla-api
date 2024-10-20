@@ -7,6 +7,7 @@ import {
   BackgroundRemovalDto,
   backgroundRemovalSchema,
 } from '~/backgroundRemoval/dto/remove-background.dto';
+import { BACKGROUND_REMOVAL_ENTITY_TYPE } from '~/constants';
 
 @Controller('background-removal')
 export class BackgroundRemovalController {
@@ -20,7 +21,10 @@ export class BackgroundRemovalController {
     @Body(new YupValidationPipe(backgroundRemovalSchema))
     data: BackgroundRemovalDto,
   ): Promise<{ jobId: string }> {
-    await this.accountService.checkAccountCredits(figmaID);
+    await this.accountService.checkAccountCredits(
+      figmaID,
+      BACKGROUND_REMOVAL_ENTITY_TYPE,
+    );
 
     return await this.backgroundRemovalService.getBackgroundRemovalProcessId(
       data,

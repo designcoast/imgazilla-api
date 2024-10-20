@@ -8,6 +8,7 @@ import {
 import { ImageOptimizationResult } from '~/types';
 import { DecryptHeader } from '~/decorators/decryptHeader';
 import { AccountService } from '~/account/account.service';
+import { IMAGE_ENTITY_TYPE } from '~/constants';
 
 @Controller('image')
 export class ImageController {
@@ -22,7 +23,7 @@ export class ImageController {
     @Body(new YupValidationPipe(imageOptimizationSchema))
     image: ImageOptimizationDto[],
   ): Promise<{ jobId: string }> {
-    await this.accountService.checkAccountCredits(figmaID);
+    await this.accountService.checkAccountCredits(figmaID, IMAGE_ENTITY_TYPE);
 
     return await this.imageService.optimizeImage(image, {
       figmaID,

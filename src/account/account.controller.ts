@@ -2,17 +2,22 @@ import {
   Controller,
   Get,
   Post,
+  Patch,
   Query,
   HttpStatus,
   Body,
   HttpException,
   ForbiddenException,
   Logger,
+  UseGuards,
+  Param,
 } from '@nestjs/common';
 import { AccountService } from '~/account/account.service';
 import { AccountEntity } from '~/account/entities/account.entity';
 import { CreateAccountDto } from '~/account/dto/CreateAccountDto';
 import { DecryptHeader } from '~/decorators/decryptHeader';
+import { UpdateCreditsDto } from '~/account/dto/UpdateCreditsDto';
+import { SecretKeyGuard } from '~/guards/secretKey.guard';
 
 @Controller('account')
 export class AccountController {
@@ -72,5 +77,21 @@ export class AccountController {
     }
 
     return accountEntity.credits;
+  }
+
+  @Patch(':id/credits')
+  @UseGuards(SecretKeyGuard)
+  async updateAccountCredits(
+    @Param('id') id: string,
+    @Body() updateCreditsDto: UpdateCreditsDto,
+  ): Promise<any> {
+    await this.accountService.updateAccountCreditsNew({
+      figmaUserID: id,
+      credits: updateCreditsDto.credits,
+    });
+
+    this.logger.log(`Account ${id} credits updated successfully`);
+
+    return { message: 'Credits updated successfully' };
   }
 }

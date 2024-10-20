@@ -7,7 +7,12 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccountEntity } from '~/account/entities/account.entity';
 import { Repository } from 'typeorm';
-import { DEFAULT_CREDITS_NUMBER, IMAGE_ENTITY_TYPE } from '~/constants';
+import {
+  BACKGROUND_REMOVAL_ENTITY_TYPE,
+  DEFAULT_CREDITS_NUMBER,
+  FAVICON_ENTITY_TYPE,
+  IMAGE_ENTITY_TYPE,
+} from '~/constants';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -47,6 +52,7 @@ export class AccountService {
     });
   }
 
+  //TODO: Remove this method when billing service is updated
   async updateAccountCredits(input: {
     figmaUserID: string;
     credits: string;
@@ -68,6 +74,30 @@ export class AccountService {
     );
   }
 
+  async updateAccountCreditsNew(input: {
+    figmaUserID: string;
+    credits: number;
+  }): Promise<void> {
+    const account = await this.findAccountByFigmaUserId(input.figmaUserID);
+
+    if (!account) {
+      throw new HttpException(
+        `Account ${input.figmaUserID} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    const currentCredits = parseInt(account.credits);
+
+    const credits = (currentCredits + input.credits).toString();
+
+    await this.accountRepository.update(
+      { figmaUserID: input.figmaUserID },
+      {
+        credits,
+      },
+    );
+  }
   async checkAccountCredits(figmaID: string, type: string = IMAGE_ENTITY_TYPE) {
     const accountEntity = await this.getAccountCredits({
       figmaUserID: figmaID,
@@ -82,11 +112,17 @@ export class AccountService {
     const FAVICON_ARCHIVE_CREDITS_COST = this.configService.get(
       'FAVICON_ARCHIVE_CREDITS_COST',
     );
+    const BACKGROUND_REMOVAL_CREDITS_COST = this.configService.get(
+      'BACKGROUND_REMOVAL_COST',
+    );
 
-    const ENTITY_CREDITS_COST =
-      type === IMAGE_ENTITY_TYPE
-        ? IMAGE_CREDITS_COST
-        : FAVICON_ARCHIVE_CREDITS_COST;
+    const totalCost = {
+      [IMAGE_ENTITY_TYPE]: IMAGE_CREDITS_COST,
+      [FAVICON_ENTITY_TYPE]: FAVICON_ARCHIVE_CREDITS_COST,
+      [BACKGROUND_REMOVAL_ENTITY_TYPE]: BACKGROUND_REMOVAL_CREDITS_COST,
+    };
+
+    const ENTITY_CREDITS_COST = totalCost[type];
 
     if (credits < ENTITY_CREDITS_COST) {
       throw new HttpException(
