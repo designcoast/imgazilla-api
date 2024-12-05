@@ -12,7 +12,7 @@ const commonConfig: TypeOrmModuleOptions & DataSourceOptions = {
   password: process.env.POSTGRES_DATABASE_PASSWORD,
   database: process.env.POSTGRES_DATABASE_NAME,
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-  migrations: [__dirname + '/../database/migrations/**/*{.ts,.js}'],
+  migrations: [__dirname + '/../database/migrations/*{.ts,.js}'],
   migrationsTableName: 'migrations',
   migrationsTransactionMode: 'each',
   synchronize: process.env.NODE_ENV === 'development',

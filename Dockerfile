@@ -23,6 +23,9 @@ COPY . .
 # Build your NestJS application (assuming it compiles TypeScript to JavaScript)
 RUN yarn build
 
+# Run migrations
+RUN yarn migration:run
+
 # Expose the port your application runs on
 EXPOSE 3000
 

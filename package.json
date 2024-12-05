@@ -19,10 +19,10 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli",
-    "migration:run": "npm run typeorm migration:run",
-    "migration:rollback": "npm run typeorm migration:revert",
-    "migration:generate": "npm run typeorm migration:generate -- -d src/configs/sources/data-source.ts src/database/migrations/$npm_config_name",
-    "migration:create": "npm run typeorm migration:create src/database/migrations/$npm_config_name"
+    "migration:run": "yarn run typeorm migration:run -d dist/configs/sources/data-source.js",
+    "migration:rollback": "yarn run typeorm migration:revert",
+    "migration:generate": "yarn run typeorm migration:generate -d src/configs/sources/data-source.ts src/database/migrations/migrations/$npm_config_name",
+    "migration:create": "yarn run typeorm migration:create src/database/migrations/$npm_config_name"
   },
   "dependencies": {
     "@gradio/client": "^1.6.0-beta.3",
