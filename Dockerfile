@@ -22,8 +22,8 @@ RUN yarn install --ignore-engines --production
 # Copy the rest of your application code
 COPY . .
 
-COPY wait-for-it.sh /usr/local/bin/wait-for-it
-RUN chmod +x /usr/local/bin/wait-for-it
+#COPY wait-for-it.sh /usr/local/bin/wait-for-it
+#RUN chmod +x /usr/local/bin/wait-for-it
 
 # Build your NestJS application (assuming it compiles TypeScript to JavaScript)
 RUN yarn build
