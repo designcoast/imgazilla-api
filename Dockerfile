@@ -29,9 +29,9 @@ RUN chmod +x /usr/local/bin/wait-for-it
 RUN yarn build
 
 # Run migrations
-CMD ["wait-for-it", "imgazilla-postgres:5432", "--", "yarn", "migration:run"]
+#CMD ["wait-for-it", "imgazilla-postgres:5432", "--", "yarn", "migration:run"]
 
 # Expose the port your application runs on
 EXPOSE 3000
 
-RUN node dist/main.js
+CMD [ "node", "dist/main.js" ]
