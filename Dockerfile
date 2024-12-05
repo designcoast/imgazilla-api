@@ -33,5 +33,3 @@ CMD ["/bin/sh", "-c", "/app/wait-for-it.sh imgazilla-postgres:5432 && yarn migra
 
 # Expose the port your application runs on
 EXPOSE 3000
-
-#CMD [ "node", "dist/main.js" ]
