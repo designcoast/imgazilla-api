@@ -34,4 +34,4 @@ RUN yarn build
 # Expose the port your application runs on
 EXPOSE 3000
 
-RUN node dist/main.js
+CMD [ "node", "dist/main.js" ]
