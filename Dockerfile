@@ -34,4 +34,4 @@ CMD ["/bin/sh", "-c", "/app/wait-for-it", "imgazilla-postgres:5432", "--", "yarn
 # Expose the port your application runs on
 EXPOSE 3000
 
-CMD [ "node", "dist/main.js" ]
+RUN node dist/main.js
