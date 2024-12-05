@@ -79,6 +79,22 @@ export class AccountController {
     return accountEntity.credits;
   }
 
+  @Patch('bonus')
+  async updateBonusAccountCredits(@DecryptHeader() figmaID: string): Promise<{
+    message: string;
+  }> {
+    const BONUS_CREDITS = 500;
+
+    await this.accountService.updateAccountBonusCredits({
+      figmaUserID: figmaID,
+      credits: BONUS_CREDITS,
+    });
+
+    this.logger.log(`Account ${figmaID} bonus credits updated successfully`);
+
+    return { message: 'xo-xo-xo' };
+  }
+
   @Patch(':id/credits')
   @UseGuards(SecretKeyGuard)
   async updateAccountCredits(

@@ -25,7 +25,7 @@ export class AccountService {
 
   async findAccountByFigmaUserId(id: string): Promise<AccountEntity> {
     return await this.accountRepository.findOne({
-      select: ['name', 'photoUrl', 'figmaUserID', 'credits'],
+      select: ['name', 'photoUrl', 'figmaUserID', 'credits', 'hasBonus'],
       where: { figmaUserID: id },
     });
   }
@@ -70,6 +70,36 @@ export class AccountService {
       { figmaUserID: input.figmaUserID },
       {
         credits: input.credits,
+      },
+    );
+  }
+
+  async updateAccountBonusCredits(input: {
+    figmaUserID: string;
+    credits: number;
+  }): Promise<void> {
+    const account = await this.findAccountByFigmaUserId(input.figmaUserID);
+
+    if (!account) {
+      throw new HttpException(
+        `Account ${input.figmaUserID} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    if (account.hasBonus) {
+      throw new ForbiddenException('Account already has a bonus');
+    }
+
+    const currentCredits = parseInt(account.credits);
+
+    const credits = (currentCredits + input.credits).toString();
+
+    await this.accountRepository.update(
+      { figmaUserID: input.figmaUserID },
+      {
+        credits,
+        hasBonus: true,
       },
     );
   }
