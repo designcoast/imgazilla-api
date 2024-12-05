@@ -3,6 +3,8 @@ FROM node:22.9-alpine
 
 RUN apk add postgresql && apk add postgresql-client && apk upgrade
 
+RUN apk add bash
+
 RUN apk add --update python3 make g++\
    && rm -rf /var/cache/apk/*
 
@@ -27,7 +29,9 @@ RUN chmod +x /usr/local/bin/wait-for-it
 RUN yarn build
 
 # Run migrations
-CMD ["wait-for-it", "imgazilla-postgres:5432", "--", "yarn", "migration:run", "&&", "node", "dist/main.js"]
+CMD ["wait-for-it", "imgazilla-postgres:5432", "--", "yarn", "migration:run"]
 
 # Expose the port your application runs on
 EXPOSE 3000
+
+RUN node dist/main.js
