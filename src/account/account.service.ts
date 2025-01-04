@@ -23,11 +23,24 @@ export class AccountService {
     private readonly configService: ConfigService,
   ) {}
 
-  async findAccountByFigmaUserId(id: string): Promise<AccountEntity> {
-    return await this.accountRepository.findOne({
+  async findAccountByFigmaUserId(id: string): Promise<{
+    name: string;
+    photoUrl: string;
+    figmaUserId: string;
+    credits: string;
+    hasBonus: boolean;
+  }> {
+    const account = await this.accountRepository.findOne({
       select: ['name', 'photourl', 'figmauserid', 'credits', 'hasBonus'],
       where: { figmauserid: id },
     });
+    return {
+      name: account?.name,
+      photoUrl: account?.photourl,
+      figmaUserId: account?.figmauserid,
+      credits: account?.credits,
+      hasBonus: account?.hasBonus,
+    };
   }
 
   async createAccount(input: {
