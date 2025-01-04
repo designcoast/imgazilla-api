@@ -27,13 +27,13 @@ export class AccountEntity {
 
   @IsString()
   @Column({ nullable: true })
-  photoUrl: string;
+  photourl: string;
 
   @IsNotEmpty()
   @IsString()
-  @Column({ name: 'figma_user_id', type: 'varchar', nullable: false })
+  @Column({ name: 'figmauserid', type: 'varchar', nullable: false })
   @PrimaryColumn()
-  figmaUserID: string;
+  figmauserid: string;
 
   @IsNotEmpty()
   @IsNumber()
@@ -48,10 +48,10 @@ export class AccountEntity {
   @Exclude()
   @IsDateString()
   @CreateDateColumn({ select: false })
-  createAt: Date;
+  createat: Date;
 
   @Exclude()
   @IsDateString()
   @UpdateDateColumn({ select: false })
-  updateAt: Date;
+  updateat: Date;
 }
