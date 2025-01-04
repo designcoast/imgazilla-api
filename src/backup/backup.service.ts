@@ -1,6 +1,8 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 
+import { Express } from 'express';
+
 import { spawn, exec } from 'child_process';
 import * as archiver from 'archiver';
 import { Readable } from 'stream';

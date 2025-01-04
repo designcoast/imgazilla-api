@@ -10,7 +10,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 
-import { Response } from 'express';
+import { Response, Express } from 'express';
 import { BackupService } from '~/backup/backup.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { SecretKeyGuard } from '~/guards/secretKey.guard';
