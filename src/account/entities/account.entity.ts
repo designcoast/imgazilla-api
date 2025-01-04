@@ -16,7 +16,7 @@ import {
 } from 'class-validator';
 import { Exclude } from 'class-transformer';
 
-@Entity('Account')
+@Entity('account')
 export class AccountEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
