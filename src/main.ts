@@ -10,11 +10,15 @@ import * as Sentry from '@sentry/node';
 import { AppModule } from './app.module';
 import { ExceptionsFilter } from '~/filters/exceptions.filter';
 import { SignalLoggerService } from '~/loggers/signal-logger.service';
+import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     rawBody: true,
   });
+
+  app.useStaticAssets(join(__dirname, '..', 'backups'));
+
   const signalLoggerService = app.get(SignalLoggerService);
   const logger = new Logger(AppModule.name);
 
