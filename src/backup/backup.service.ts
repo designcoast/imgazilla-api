@@ -6,7 +6,6 @@ import { Express } from 'express';
 import { spawn, exec } from 'child_process';
 import * as archiver from 'archiver';
 import { Readable } from 'stream';
-import { promises as fs } from 'fs';
 import { promisify } from 'util';
 
 import { SignalAlertService } from '~/signal-alert/signal-alert.service';
@@ -99,29 +98,17 @@ export class BackupService {
   }
 
   async restoreBackup(file: Express.Multer.File): Promise<string> {
-    const filePath = join(this.backupDirectory, file.originalname);
-
-    // Save the uploaded file locally
-    try {
-      await fs.writeFile(filePath, file.buffer);
-    } catch (error) {
-      this.logger.error('Failed to save uploaded file', error);
-      throw new HttpException(
-        'Failed to save uploaded file',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+    if (!file) {
+      throw new HttpException('No file uploaded', HttpStatus.BAD_REQUEST);
     }
 
-    // Restore the backup
-    const restoreCommand = this.getRestoreCommand(filePath);
-
     try {
-      const { stdout, stderr } = await execAsync(restoreCommand);
-      if (stderr) {
-        throw new Error(stderr);
-      }
-      this.logger.log(`Backup restored successfully from ${file.originalname}`);
-      return stdout;
+      await this.getRestoreCommandFromBuffer(file);
+
+      this.logger.log(
+        `Backup restored successfully from buffer (${file.originalname})`,
+      );
+      return `Backup restored successfully: ${file.originalname}`;
     } catch (error) {
       this.logger.error('Error restoring backup', error);
       throw new HttpException(
@@ -131,15 +118,49 @@ export class BackupService {
     }
   }
 
-  private getRestoreCommand(filePath: string): string {
+  private async getRestoreCommandFromBuffer(
+    file: Express.Multer.File,
+  ): Promise<void> {
     const { host, port, username, password, database } = this.dbConfig;
 
-    process.env.PGPASSWORD = process.env.POSTGRES_DATABASE_PASSWORD;
+    process.env.PGPASSWORD = password;
 
-    if (filePath.endsWith('.sql')) {
-      return `PGPASSWORD=${password} psql -h ${host} -p ${port} -U ${username} -d ${database} -f "${filePath}"`;
-    } else if (filePath.endsWith('.tar') || filePath.endsWith('.gz')) {
-      return `PGPASSWORD=${password} pg_restore -h ${host} -p ${port} -U ${username} -d ${database} "${filePath}"`;
+    if (file.originalname.endsWith('.sql')) {
+      const restoreCommand = `echo "${file.buffer.toString()}" | psql -h ${host} -p ${port} -U ${username} -d ${database}`;
+      await execAsync(restoreCommand);
+    } else if (
+      file.originalname.endsWith('.tar') ||
+      file.originalname.endsWith('.gz')
+    ) {
+      const args = [
+        '-U',
+        process.env.POSTGRES_DATABASE_USER,
+        '-h',
+        process.env.POSTGRES_DATABASE_HOST,
+        '-p',
+        process.env.POSTGRES_DATABASE_PORT,
+        process.env.POSTGRES_DATABASE_NAME,
+      ];
+
+      process.env.PGPASSWORD = process.env.POSTGRES_DATABASE_PASSWORD;
+      const restoreProcess = spawn('pg_restore', args);
+
+      const readable = new Readable();
+      readable._read = () => {};
+      readable.push(file.buffer);
+      readable.push(null);
+
+      readable.pipe(restoreProcess.stdin);
+
+      return new Promise((resolve, reject) => {
+        restoreProcess.on('close', (code) => {
+          if (code !== 0) {
+            reject(new Error(`pg_restore exited with code ${code}`));
+          } else {
+            resolve();
+          }
+        });
+      });
     } else {
       throw new HttpException(
         'Unsupported backup format',
