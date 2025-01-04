@@ -1,15 +1,29 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 
-import { spawn } from 'child_process';
+import { spawn, exec } from 'child_process';
 import * as archiver from 'archiver';
 import { Readable } from 'stream';
+import { promises as fs } from 'fs';
+import { promisify } from 'util';
 
 import { SignalAlertService } from '~/signal-alert/signal-alert.service';
+import { join } from 'path';
+
+const execAsync = promisify(exec);
 
 @Injectable()
 export class BackupService {
   private readonly logger = new Logger(BackupService.name);
+  private dbConfig = {
+    host: process.env.POSTGRES_DATABASE_HOST,
+    port: process.env.POSTGRES_DATABASE_PORT,
+    username: process.env.POSTGRES_DATABASE_USER,
+    password: process.env.POSTGRES_DATABASE_PASSWORD,
+    database: process.env.POSTGRES_DATABASE_NAME,
+  };
+
+  private backupDirectory = join(__dirname, '..', 'backups');
   constructor(private readonly signalAlertService: SignalAlertService) {}
 
   @Cron('0 0 */3 * *') // Every three days at midnight
@@ -80,5 +94,55 @@ export class BackupService {
 
       resolve(archive);
     });
+  }
+
+  async restoreBackup(file: Express.Multer.File): Promise<string> {
+    const filePath = join(this.backupDirectory, file.originalname);
+
+    // Save the uploaded file locally
+    try {
+      await fs.writeFile(filePath, file.buffer);
+    } catch (error) {
+      this.logger.error('Failed to save uploaded file', error);
+      throw new HttpException(
+        'Failed to save uploaded file',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    // Restore the backup
+    const restoreCommand = this.getRestoreCommand(filePath);
+
+    try {
+      const { stdout, stderr } = await execAsync(restoreCommand);
+      if (stderr) {
+        throw new Error(stderr);
+      }
+      this.logger.log(`Backup restored successfully from ${file.originalname}`);
+      return stdout;
+    } catch (error) {
+      this.logger.error('Error restoring backup', error);
+      throw new HttpException(
+        'Failed to restore backup',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  private getRestoreCommand(filePath: string): string {
+    const { host, port, username, password, database } = this.dbConfig;
+
+    process.env.PGPASSWORD = process.env.POSTGRES_DATABASE_PASSWORD;
+
+    if (filePath.endsWith('.sql')) {
+      return `PGPASSWORD=${password} psql -h ${host} -p ${port} -U ${username} -d ${database} -f "${filePath}"`;
+    } else if (filePath.endsWith('.tar') || filePath.endsWith('.gz')) {
+      return `PGPASSWORD=${password} pg_restore -h ${host} -p ${port} -U ${username} -d ${database} "${filePath}"`;
+    } else {
+      throw new HttpException(
+        'Unsupported backup format',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }
