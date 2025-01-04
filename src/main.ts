@@ -40,7 +40,7 @@ async function bootstrap() {
 
   // app.setGlobalPrefix('api');
   app.use(helmet());
-  app.enableCors();
+  // app.enableCors();
 
   app.enableShutdownHooks();
 
