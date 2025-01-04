@@ -22,14 +22,15 @@ RUN yarn install --ignore-engines --production
 # Copy the rest of your application code
 COPY . .
 
-COPY ./wait-for-it.sh /app/wait-for-it.sh
-RUN chmod +x /app/wait-for-it.sh
+#COPY ./wait-for-it.sh /app/wait-for-it.sh
+#RUN chmod +x /app/wait-for-it.sh
 
 # Build your NestJS application (assuming it compiles TypeScript to JavaScript)
 RUN yarn build
 
 # Run migrations
-CMD ["/bin/sh", "-c", "/app/wait-for-it.sh imgazilla-postgres:5432 && yarn migration:run && node dist/main.js"]
+#CMD ["/bin/sh", "-c", "/app/wait-for-it.sh imgazilla-postgres:5432 && yarn migration:run && node dist/main.js"]
+CMD ["/bin/sh", "-c", "node dist/main.js"]
 
 # Expose the port your application runs on
 EXPOSE 3000
