@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 
 import { ThrottlerModule } from '@nestjs/throttler';
@@ -31,6 +31,7 @@ import { BillingModule } from './billing/billing.module';
 import { HeadersGuard } from '~/guards/headers.guard';
 import { BackupModule } from '~/backup/backup.module';
 import { BackgroundRemovalModule } from '~/backgroundRemoval/backgroundRemoval.module';
+import { TimeoutInterceptor } from '~/interceptors/TimeoutInterceptor';
 
 @Module({
   imports: [
@@ -75,6 +76,10 @@ import { BackgroundRemovalModule } from '~/backgroundRemoval/backgroundRemoval.m
     },
     SignalLoggerService,
     SignalAlertService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TimeoutInterceptor,
+    },
   ],
 })
 export class AppModule {}
