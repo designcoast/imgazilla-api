@@ -25,9 +25,16 @@ export class AccountController {
 
   constructor(private readonly accountService: AccountService) {}
   @Get('getAccount')
-  async getAccount(
-    @Query('id') id: string,
-  ): Promise<NonNullable<unknown> | AccountEntity> {
+  async getAccount(@Query('id') id: string): Promise<
+    | NonNullable<unknown>
+    | {
+        name: string;
+        photoUrl: string;
+        figmaUserId: string;
+        credits: string;
+        hasBonus: boolean;
+      }
+  > {
     const existedAccount =
       await this.accountService.findAccountByFigmaUserId(id);
 
@@ -40,9 +47,13 @@ export class AccountController {
   }
 
   @Post('createAccount')
-  async createUserAccount(
-    @Body() createAccountDto: CreateAccountDto,
-  ): Promise<AccountEntity> {
+  async createUserAccount(@Body() createAccountDto: CreateAccountDto): Promise<{
+    name: string;
+    photoUrl: string;
+    figmaUserId: string;
+    credits: string;
+    hasBonus: boolean;
+  }> {
     const { id, name, photoUrl } = createAccountDto;
     const existedAccount =
       await this.accountService.findAccountByFigmaUserId(id);
