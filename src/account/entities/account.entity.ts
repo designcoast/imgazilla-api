@@ -37,7 +37,7 @@ export class AccountEntity {
 
   @IsNotEmpty()
   @IsNumber()
-  @Column({ name: 'credits', type: 'varchar', default: '30' })
+  @Column({ name: 'credits', type: 'varchar', default: '300' })
   credits: string;
 
   @IsNotEmpty()
