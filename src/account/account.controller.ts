@@ -40,13 +40,9 @@ export class AccountController {
   }
 
   @Post('createAccount')
-  async createUserAccount(@Body() createAccountDto: CreateAccountDto): Promise<{
-    name: string;
-    photoUrl: string;
-    figmaUserId: string;
-    credits: string;
-    hasBonus: boolean;
-  }> {
+  async createUserAccount(
+    @Body() createAccountDto: CreateAccountDto,
+  ): Promise<AccountEntity> {
     const { id, name, photoUrl } = createAccountDto;
     const existedAccount =
       await this.accountService.findAccountByFigmaUserId(id);

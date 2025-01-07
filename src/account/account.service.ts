@@ -23,16 +23,10 @@ export class AccountService {
     private readonly configService: ConfigService,
   ) {}
 
-  async findAccountByFigmaUserId(id: string): Promise<{
-    name: string;
-    photoUrl: string;
-    figmaUserId: string;
-    credits: string;
-    hasBonus: boolean;
-  }> {
+  async findAccountByFigmaUserId(id: string): Promise<AccountEntity> {
     return await this.accountRepository.findOne({
-      select: ['name', 'photoUrl', 'figmaUserId', 'credits', 'hasBonus'],
-      where: { figmaUserId: id },
+      select: ['name', 'photoUrl', 'figmaUserID', 'credits', 'hasBonus'],
+      where: { figmaUserID: id },
     });
   }
 
@@ -54,7 +48,7 @@ export class AccountService {
   }): Promise<AccountEntity> {
     return await this.accountRepository.findOne({
       select: ['credits'],
-      where: { figmaUserId: input.figmaUserID },
+      where: { figmaUserID: input.figmaUserID },
     });
   }
 
@@ -73,7 +67,7 @@ export class AccountService {
     }
 
     await this.accountRepository.update(
-      { figmaUserId: input.figmaUserID },
+      { figmaUserID: input.figmaUserID },
       {
         credits: input.credits,
       },
@@ -102,7 +96,7 @@ export class AccountService {
     const credits = (currentCredits + input.credits).toString();
 
     await this.accountRepository.update(
-      { figmaUserId: input.figmaUserID },
+      { figmaUserID: input.figmaUserID },
       {
         credits,
         hasBonus: true,
@@ -128,7 +122,7 @@ export class AccountService {
     const credits = (currentCredits + input.credits).toString();
 
     await this.accountRepository.update(
-      { figmaUserId: input.figmaUserID },
+      { figmaUserID: input.figmaUserID },
       {
         credits,
       },
