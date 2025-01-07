@@ -25,16 +25,9 @@ export class AccountController {
 
   constructor(private readonly accountService: AccountService) {}
   @Get('getAccount')
-  async getAccount(@Query('id') id: string): Promise<
-    | NonNullable<unknown>
-    | {
-        name: string;
-        photoUrl: string;
-        figmaUserId: string;
-        credits: string;
-        hasBonus: boolean;
-      }
-  > {
+  async getAccount(
+    @Query('id') id: string,
+  ): Promise<NonNullable<unknown> | AccountEntity> {
     const existedAccount =
       await this.accountService.findAccountByFigmaUserId(id);
 

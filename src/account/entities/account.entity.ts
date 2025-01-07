@@ -16,7 +16,7 @@ import {
 } from 'class-validator';
 import { Exclude } from 'class-transformer';
 
-@Entity('account')
+@Entity('Account')
 export class AccountEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -27,13 +27,13 @@ export class AccountEntity {
 
   @IsString()
   @Column({ nullable: true })
-  photourl: string;
+  photoUrl: string;
 
   @IsNotEmpty()
   @IsString()
-  @Column({ name: 'figmauserid', type: 'varchar', nullable: false })
+  @Column({ name: 'figma_user_id', type: 'varchar', nullable: false })
   @PrimaryColumn()
-  figmauserid: string;
+  figmaUserId: string;
 
   @IsNotEmpty()
   @IsNumber()
@@ -48,10 +48,10 @@ export class AccountEntity {
   @Exclude()
   @IsDateString()
   @CreateDateColumn({ select: false })
-  createat: Date;
+  createAt: Date;
 
   @Exclude()
   @IsDateString()
   @UpdateDateColumn({ select: false })
-  updateat: Date;
+  updateAt: Date;
 }
