@@ -33,7 +33,7 @@ export class AccountEntity {
   @IsString()
   @Column({ name: 'figma_user_id', type: 'varchar', nullable: false })
   @PrimaryColumn()
-  figmaUserId: string;
+  figmaUserID: string;
 
   @IsNotEmpty()
   @IsNumber()
