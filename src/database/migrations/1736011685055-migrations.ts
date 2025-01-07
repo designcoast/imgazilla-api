@@ -8,7 +8,7 @@ export class Migrations1736011685055 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'varchar',
+            type: 'serial',
             generationStrategy: 'uuid',
             isPrimary: true,
           },
