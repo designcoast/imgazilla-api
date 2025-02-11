@@ -1,9 +1,9 @@
-<p align="center">
+<div align="center">
     <br><h2><b>Imgazilla api - </b> service for Figma plugin</h2>
     <a href="http://imgazilla.app/" target="blank">
         <img align="center" width="639" src="https://github.com/user-attachments/assets/1b8b8d47-2fe5-45cf-b65c-c3d19bc0cfbf" alt="imgazilla api" />
     </a>
-</p>
+</div>
 
 
 ## 📖 Table of Features
