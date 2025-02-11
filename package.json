@@ -1,10 +1,8 @@
 {
   "name": "imgazilla-api",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "API for imgazilla Figma plugin",
-  "author": "imgazilla team",
-  "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
