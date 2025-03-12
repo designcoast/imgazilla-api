@@ -28,6 +28,7 @@ export class ExceptionsFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
+    const clientIp = request.ip || request.headers['x-forwarded-for'];
 
     Sentry.captureException(exception);
 
@@ -56,7 +57,7 @@ export class ExceptionsFilter implements ExceptionFilter {
         : messageException.message;
     }
 
-    const errorMessage = `HTTP Status: ${status}, Error Message: ${message}, Endpoint: ${request.url}`;
+    const errorMessage = `HTTP Status: ${status}, Error Message: ${message}, Endpoint: ${request.url}, IP: ${clientIp}`;
 
     this.logger.error(errorMessage);
 
@@ -67,6 +68,7 @@ export class ExceptionsFilter implements ExceptionFilter {
     response.status(status).json({
       statusCode: status,
       timestamp: new Date().toISOString(),
+      ip: clientIp,
       path: request.url,
       message: message,
     });
