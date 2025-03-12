@@ -13,6 +13,7 @@ import { Request, Response } from 'express';
 import * as Sentry from '@sentry/node';
 
 import { SignalLoggerService } from '~/loggers/signal-logger.service';
+import { getClientIp } from '~/utils/getClientIp';
 
 @Catch()
 export class ExceptionsFilter implements ExceptionFilter {
@@ -28,7 +29,7 @@ export class ExceptionsFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
-    const clientIp = request.ip || request.headers['x-forwarded-for'];
+    const clientIp = getClientIp(request);
 
     Sentry.captureException(exception);
 

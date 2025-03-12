@@ -17,6 +17,8 @@ async function bootstrap() {
     rawBody: true,
   });
 
+  app.enable('trust proxy');
+
   app.useStaticAssets(join(__dirname, '..', 'backups'));
 
   const signalLoggerService = app.get(SignalLoggerService);
