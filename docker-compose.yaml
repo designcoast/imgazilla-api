@@ -21,7 +21,6 @@ services:
       - "traefik.http.routers.imgazilla-app.rule=(Host(`imgazilla.app`) && PathPrefix(`/api`))"
       - "traefik.http.routers.imgazilla-app.middlewares=route-prefix@docker"
       - "traefik.http.services.imgazilla-app.loadbalancer.server.port=3000"
-      - "traefik.http.middlewares.real-ip.headers.customRequestHeaders.X-Forwarded-For: client"
 
   imgazilla-redis:
     image: redis:latest
