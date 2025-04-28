@@ -19,8 +19,6 @@ services:
       - "traefik.constraint-label=vs0ooog"
       - "traefik.http.routers.imgazilla-app.entryPoints=https"
       - "traefik.http.routers.imgazilla-app.rule=(Host(`imgazilla.app`) && PathPrefix(`/api`))"
-      - "traefik.http.routers.imgazilla-app.middlewares=imgazilla-strip-prefix@docker"
-      - "traefik.http.middlewares.imgazilla-strip-prefix.stripprefix.prefixes=/api"
       - "traefik.http.services.imgazilla-app.loadbalancer.server.port=3000"
 
   imgazilla-redis:
