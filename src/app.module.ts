@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 
-import { ThrottlerModule } from '@nestjs/throttler';
+import { seconds, ThrottlerModule } from '@nestjs/throttler';
 import { ScheduleModule } from '@nestjs/schedule';
 
 import { AppController } from './app.controller';
@@ -32,6 +32,7 @@ import { HeadersGuard } from '~/guards/headers.guard';
 import { BackupModule } from '~/backup/backup.module';
 import { BackgroundRemovalModule } from '~/backgroundRemoval/backgroundRemoval.module';
 import { TimeoutInterceptor } from '~/interceptors/TimeoutInterceptor';
+import { HealthCheckModule } from '~/healthcheck/health.module';
 
 @Module({
   imports: [
@@ -48,11 +49,23 @@ import { TimeoutInterceptor } from '~/interceptors/TimeoutInterceptor';
     BillingModule,
     ThrottlerModule.forRoot([
       {
-        ttl: 60000,
+        name: 'short',
+        ttl: seconds(1),
+        limit: 10,
+      },
+      {
+        name: 'medium',
+        ttl: seconds(10),
         limit: 20,
+      },
+      {
+        name: 'long',
+        ttl: seconds(60),
+        limit: 100,
       },
     ]),
     BackupModule,
+    HealthCheckModule,
   ],
   controllers: [AppController, FaviconController],
   providers: [
