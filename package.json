@@ -36,6 +36,7 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^10.4.4",
     "@nestjs/schedule": "^4.1.1",
+    "@nestjs/terminus": "^11.0.0",
     "@nestjs/throttler": "^6.2.1",
     "@nestjs/typeorm": "^10.0.2",
     "@sentry/node": "^8.33.1",
@@ -69,7 +70,6 @@
   },
   "devDependencies": {
     "@nestjs/schematics": "^10.1.4",
-    "@nestjs/terminus": "^11.0.0",
     "@nestjs/testing": "^10.4.4",
     "@types/archiver": "^6.0.2",
     "@types/crypto-js": "^4.2.2",
