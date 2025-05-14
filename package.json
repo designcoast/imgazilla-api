@@ -23,9 +23,10 @@
     "migration:create": "yarn run typeorm migration:create src/database/migrations/$npm_config_name"
   },
   "dependencies": {
-    "@gradio/client": "^1.6.0-beta.3",
+    "@gradio/client": "^1.14.0",
     "@grammyjs/nestjs": "^0.3.4",
     "@lemonsqueezy/lemonsqueezy.js": "^3.3.1",
+    "@nestjs/axios": "^4.0.0",
     "@nestjs/bull": "^10.2.1",
     "@nestjs/bullmq": "^10.2.1",
     "@nestjs/cli": "^10.4.5",
@@ -42,7 +43,7 @@
     "@sentry/tracing": "^7.114.0",
     "archiver": "^7.0.1",
     "archiver-zip-encrypted": "^2.0.0",
-    "axios": "^1.7.7",
+    "axios": "^1.9.0",
     "base64-arraybuffer": "^1.0.2",
     "bull": "^4.16.3",
     "bullmq": "^5.15.0",
@@ -68,6 +69,7 @@
   },
   "devDependencies": {
     "@nestjs/schematics": "^10.1.4",
+    "@nestjs/terminus": "^11.0.0",
     "@nestjs/testing": "^10.4.4",
     "@types/archiver": "^6.0.2",
     "@types/crypto-js": "^4.2.2",
@@ -110,5 +112,6 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
