@@ -32,7 +32,7 @@ import { HeadersGuard } from '~/guards/headers.guard';
 import { BackupModule } from '~/backup/backup.module';
 import { BackgroundRemovalModule } from '~/backgroundRemoval/backgroundRemoval.module';
 import { TimeoutInterceptor } from '~/interceptors/TimeoutInterceptor';
-import { HealthCheckModule } from '~/healthcheck/health.module';
+// import { HealthCheckModule } from '~/healthcheck/health.module';
 
 @Module({
   imports: [
@@ -65,7 +65,7 @@ import { HealthCheckModule } from '~/healthcheck/health.module';
       },
     ]),
     BackupModule,
-    HealthCheckModule,
+    // HealthCheckModule,
   ],
   controllers: [AppController, FaviconController],
   providers: [
